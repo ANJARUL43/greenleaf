@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GreenLeaf: Practical Plant Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel='manifest' href='/manifest.webmanifest'><meta name='theme-color' content='#1d6b43'><link rel='icon' href='/icons/icon-192.png'><link rel='apple-touch-icon' href='/icons/icon-192.png'><script src='/sync.js'></script>
+<style>
+:root{--bg:#f2f6f0;--surface:#fff;--ink:#14281d;--muted:#566b5e;--green:#1d6b43;--on:#fff;--leaf:#4fa84f;--sun:#f2a900;--soil:#6b4a2f;--sky:#dcecf3;--line:#dbe6d7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a13;--surface:#16271d;--ink:#e7f2e5;--muted:#9db6a4;--green:#6fcf8f;--on:#08210f;--sky:#16313b;--line:#26402f}}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.1;margin:0}
+h2{font-size:2rem}h3{font-size:1.5rem}h4{margin:14px 0 6px}
+p{margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 50px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 0}
+.brand{display:flex;gap:8px;align-items:center;font:800 1.25rem Fraunces,Georgia,serif;color:var(--green);text-decoration:none}
+.top nav{display:flex;gap:2px;flex-wrap:wrap}
+.top nav a{color:var(--muted);text-decoration:none;font-weight:600;font-size:.92rem;padding:8px 12px;border-radius:99px}
+.top nav a:hover{background:var(--line)}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding:28px 0 8px}
+@media(max-width:800px){.hero,.two,.lib{grid-template-columns:1fr!important}}
+.eyebrow{color:var(--green);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
+h1{font-size:clamp(2.3rem,5.6vw,3.7rem);margin:10px 0 14px}
+.lead{color:var(--muted);font-size:1.1rem;max-width:52ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+.btn{display:inline-block;background:var(--green);color:var(--on);border:2px solid var(--green);border-radius:12px;padding:11px 20px;font:inherit;font-weight:700;text-decoration:none;cursor:pointer;min-height:44px}
+.btn.alt{background:transparent;color:var(--green)}
+.facts{display:flex;gap:18px;flex-wrap:wrap;list-style:none;padding:0;margin:0;color:var(--muted);font-weight:600;font-size:.92rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 24px 40px -30px rgba(15,61,42,.55)}
+.scene{border-radius:16px;overflow:hidden;background:var(--sky)}
+svg{display:block;width:100%;height:auto;max-height:380px}
+.stage{font:800 1.5rem Fraunces,Georgia,serif;color:var(--green);margin:12px 0 2px}
+.muted{color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--green);height:36px}
+.sec{margin-top:76px}
+.sec>.muted{max-width:60ch;margin:8px 0 22px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer;min-height:44px}
+.tab[aria-selected="true"]{background:var(--green);color:var(--on);border-color:var(--green)}
+.lib{display:grid;grid-template-columns:250px 1fr;gap:20px;align-items:start}
+.list{display:grid;gap:8px}
+@media(max-width:800px){.list{grid-template-columns:repeat(2,1fr)}}
+.pc{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:10px 12px;font:inherit;cursor:pointer;min-height:50px}
+.pc[aria-pressed="true"]{border-color:var(--green);box-shadow:inset 0 0 0 2px var(--green)}
+.pc span{font-size:1.6rem}
+.dh{display:flex;gap:12px;align-items:center}.dh .big{font-size:2.6rem}
+.tag{display:inline-block;background:var(--sky);border-radius:99px;padding:1px 10px;font-size:.8rem;font-weight:600}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0}
+.kv div{background:var(--bg);border-radius:12px;padding:10px 12px}
+.kv small{display:block;color:var(--muted);font-weight:600}
+.steps{list-style:none;counter-reset:s;padding:0;margin:8px 0 14px;display:grid;gap:10px}
+.steps li{counter-increment:s;padding-left:42px;position:relative;min-height:30px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--sun);color:#1b1b10;font-weight:800;display:grid;place-items:center;font-size:.9rem}
+.note{border-radius:12px;padding:10px 14px;margin-top:8px}
+.warn{background:rgba(224,87,122,.13)}.tip{background:rgba(79,168,79,.16)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{font-weight:600;display:block;margin-bottom:4px}
+select{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px;min-height:44px;width:100%}
+.out{background:var(--bg);border-radius:14px;padding:14px 16px;margin-top:14px}
+.out b{font:700 1.4rem Fraunces,Georgia,serif;color:var(--green)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.row{display:flex;justify-content:space-between;font-weight:600;gap:10px}.row b{color:var(--green)}
+.bar{height:14px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0 10px}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--green);transition:width .3s}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.presets .btn{padding:6px 14px;min-height:40px;font-size:.92rem}
+input[type=text],input[type=number],input[type=date],input[type=search]{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px;min-height:44px;width:100%}
+.btn.sm{padding:6px 12px;min-height:40px;font-size:.9rem}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:14px}
+.badge{display:inline-block;border-radius:99px;padding:1px 10px;font-size:.8rem;font-weight:700}
+.badge.ok{background:rgba(79,168,79,.22)}.badge.late{background:rgba(224,87,122,.22)}.badge.due{background:rgba(242,169,0,.28)}
+.mini{display:flex;gap:6px;margin-top:8px}.mini input{min-width:0}
+details summary{cursor:pointer;color:var(--green)}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none;max-height:none}
+.top nav a{display:flex;align-items:center;gap:10px}
+h2{display:flex;align-items:center;gap:10px}h2 .ic{width:28px;height:28px;color:var(--green)}
+@media(min-width:901px){.top{position:fixed;inset:0 auto 0 0;width:236px;flex-direction:column;align-items:stretch;justify-content:flex-start;flex-wrap:nowrap;padding:calc(22px + env(safe-area-inset-top,0px)) 14px 22px;background:var(--surface);border-right:1px solid var(--line);overflow:auto;z-index:5}.top nav{flex-direction:column;gap:4px;margin-top:18px}.top nav a{padding:10px 12px;border-radius:12px;font-size:.95rem}.wrap{max-width:none;margin:0 0 0 236px;padding:0 36px 60px}.wrap>section{max-width:1000px}}
+@media(max-width:900px){.top nav{flex-wrap:nowrap;overflow-x:auto;width:100%}.top nav a{white-space:nowrap}}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;align-items:center;gap:8px;box-shadow:0 12px 24px -10px rgba(15,61,42,.7)}
+.chat{display:flex;flex-direction:column;gap:10px;min-height:260px;max-height:460px;overflow:auto;padding:4px}
+.msg{max-width:90%;padding:10px 14px;border-radius:16px;white-space:pre-wrap;word-break:break-word}
+.msg.u{align-self:flex-end;background:var(--green);color:var(--on)}
+.msg.a{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.msg.o{border-style:dashed}
+.dots i{display:inline-block;width:7px;height:7px;margin-right:4px;border-radius:50%;background:var(--muted);animation:bl 1s infinite}.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes bl{50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.dots i{animation:none}}
+.tl{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tl span{border:1px solid var(--line);border-radius:99px;padding:2px 10px;font-size:.82rem;font-weight:600;color:var(--muted)}.tl .on{background:var(--green);color:var(--on);border-color:var(--green)}
+[hidden]{display:none!important}
+.flag{display:inline-block;background:rgba(242,169,0,.25);border-radius:8px;padding:2px 10px;font-size:.82rem;font-weight:700}
+footer{margin-top:80px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<a class="brand" href="#top"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="max-height:none"><circle cx="14" cy="14" r="14" fill="var(--green)"/><path d="M14 22V12M14 14C14 9 18 7 22 7C22 12 19 14 14 14ZM14 17C14 13 11 11 7 11C7 15 9 17 14 17Z" stroke="var(--on)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>GreenLeaf</a>
+<svg style='position:absolute;width:0;height:0' aria-hidden='true'><symbol id='i-home' viewBox='0 0 24 24'><path d='M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z'/></symbol><symbol id='i-garden' viewBox='0 0 24 24'><path d='M4 21h16M7 21v-4h10v4M12 17V9M12 12c0-3 2-4 5-4 0 3-2 4-5 4zM12 14c0-2-2-3-5-3 0 2 2 3 5 3z'/></symbol><symbol id='i-lib' viewBox='0 0 24 24'><path d='M4 5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2zM4 20a2 2 0 0 0 2 2h13v-4M12 14c-2 0-3-1.5-3-4 2 0 3 1 3 4zM12 14c0-3 1-4 3-4 0 2-1 4-3 4z'/></symbol><symbol id='i-cal' viewBox='0 0 24 24'><rect x='3' y='5' width='18' height='16' rx='2'/><path d='M3 10h18M8 3v4M16 3v4'/></symbol><symbol id='i-doc' viewBox='0 0 24 24'><path d='M20 4C10 4 5 9 5 15c0 2 .5 3 1 4 6 0 14-3 14-15z'/><path d='M12 9v6M9 12h6'/></symbol><symbol id='i-lab' viewBox='0 0 24 24'><path d='M9 3h6M10 3v6l-5.5 10a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3'/><path d='M12 19c-2 0-3-1.2-3-3 2 0 3 .8 3 3zM12 19c0-2 1-3 3-3 0 2-1 3-3 3z'/></symbol><symbol id='i-ai' viewBox='0 0 24 24'><path d='M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z'/><path d='M12 14c-2.5 0-4-1.5-4-4 2.5 0 4 1.5 4 4zM12 14c0-2.5 1.5-4 4-4 0 2.5-1.5 4-4 4z'/></symbol><symbol id='i-cam' viewBox='0 0 24 24'><path d='M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z'/><path d='M12 17c-2.5 0-4-1.5-4-4 2.5 0 4 1.5 4 4zM12 17c0-2.5 1.5-4 4-4 0 2.5-1.5 4-4 4z'/></symbol><symbol id='i-bask' viewBox='0 0 24 24'><path d='M3 10h18l-2 10H5zM8 10l3-6M16 10l-3-6'/></symbol><symbol id='i-water' viewBox='0 0 24 24'><path d='M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'/></symbol></svg>
+<nav aria-label='Main'><a href='#top'><svg class='ic'><use href='#i-home'/></svg>Home</a><a href='#garden'><svg class='ic'><use href='#i-garden'/></svg>My garden</a><a href='#library'><svg class='ic'><use href='#i-lib'/></svg>Plant library</a><a href='#calendar'><svg class='ic'><use href='#i-cal'/></svg>Calendar</a><a href='#doctor'><svg class='ic'><use href='#i-doc'/></svg>Plant doctor</a><a href='#plantlab'><svg class='ic'><use href='#i-lab'/></svg>Plant Lab</a><a href='#assistant'><svg class='ic'><use href='#i-ai'/></svg>AI assistant</a><a href='#camera'><svg class='ic'><use href='#i-cam'/></svg>Plant Camera</a><a href='#harvest'><svg class='ic'><use href='#i-bask'/></svg>Harvest predictor</a><a href='#planner'><svg class='ic'><use href='#i-water'/></svg>Water planner</a></nav>
+</header>
+
+<section class="hero" id="top">
+<div>
+<p class="eyebrow">Practical plant guide for India</p>
+<h1>Grow flowers, herbs and trees with confidence.</h1>
+<p class="lead">Simple, step-by-step guides for 21 popular plants, plus tools to plan your watering, choose what to plant this month and fix plant problems.</p>
+<div class="cta"><a class="btn" href="#library">Browse plants</a><a class="btn alt" href="#plantlab">Open Plant Lab</a></div>
+<ul class="facts"><li>21 plant guides</li><li>Personal garden tracker</li><li>Seasons for North India</li></ul>
+</div>
+<div class="card">
+<div class="scene"><svg viewBox="0 0 240 300" role="img" aria-label="A plant growing from a seed"><circle cx="195" cy="45" r="22" fill="var(--sun)"/><rect y="240" width="240" height="60" fill="var(--soil)"/><g id="gro" stroke="#e9d9bf" stroke-width="2.5" stroke-linecap="round" fill="none"></g><g id="gp"></g></svg></div>
+<p class="stage" id="gst">Seed</p>
+<p class="muted" id="gtx" style="min-height:3.2em"></p>
+<div class="row"><label for="gr">Time</label><b id="gd">Day 0</b></div>
+<input id="gr" type="range" min="0" max="60" value="0">
+<div class="chips"><button class="btn" id="gpl" type="button">Play</button><button class="btn alt" id="grs" type="button">Reset</button></div>
+</div>
+</section>
+
+<section class="sec" id="library">
+<h2>Plant library</h2>
+<p class="muted">Pick a plant to see exactly how to grow it: sunlight, water, soil, best season and clear steps. Seasons are for the plains of North India, like Bihar.</p>
+<div style="max-width:380px;margin-bottom:12px"><label for="q">Search plants</label><input id="q" type="search" placeholder="Name, category or scientific name"></div>
+<div class="tabs" id="tabs" role="tablist"></div>
+<div class="lib"><div class="list" id="list"></div><div class="card" id="det"></div></div>
+</section>
+
+<section class="sec" id="garden">
+<h2><svg class='ic'><use href='#i-garden'/></svg>My garden</h2>
+<p class="muted">Add the plants you grow and track watering, feeding, height and notes. Your data is saved in this browser on this device only.</p>
+<div class="card">
+<div class="form">
+<div><label for="gaPl">Plant</label><select id="gaPl"></select></div>
+<div><label for="gaNick">Nickname (optional)</label><input id="gaNick" type="text" maxlength="30" placeholder="For example: Balcony tulsi"></div>
+<div><label for="gaDate">Planting date</label><input id="gaDate" type="date"></div>
+<div><label for="gaW">Water every (days)</label><input id="gaW" type="number" min="1" max="60"></div>
+<div><label for="gaF">Feed every (days)</label><input id="gaF" type="number" min="7" max="120" value="30"></div>
+</div>
+<p class="muted" style="margin-top:10px">The day counts are only starting values. Change them to match your soil, weather and the plant guide.</p>
+<div class="chips" style="margin-top:12px"><button class="btn" id="gaAdd" type="button">Add to my garden</button><span class="muted" id="gaMsg" role="status"></span></div>
+</div>
+<div class="out" id="gaSum" style="margin-top:16px"></div>
+<div class="ggrid" id="gaList"></div>
+</section>
+
+<section class="sec" id="planner">
+<h2>Water planner</h2>
+<p class="muted">Choose your plant, pot size and season to get a starting point for how much and how often to water.</p>
+<div class="card">
+<div class="form">
+<div><label for="pl">Plant</label><select id="pl"></select></div>
+<div><label for="ps">Pot size</label><select id="ps"><option value="0">Small (5–6 inch)</option><option value="1" selected>Medium (8–10 inch)</option><option value="2">Large (12–14 inch)</option></select></div>
+<div><label for="se">Season</label><select id="se"><option value="summer">Summer (Apr–Jun)</option><option value="monsoon">Monsoon (Jul–Sep)</option><option value="winter" selected>Winter (Nov–Feb)</option></select></div>
+</div>
+<div class="form" style="margin-top:12px"><div><label for="lo">Location</label><select id="lo"><option value="outdoor">Outdoor</option><option value="indoor">Indoor</option></select></div><div><label for="so">Soil type</label><select id="so"><option value="loam" selected>Loamy (balanced)</option><option value="sandy">Sandy (drains fast)</option><option value="clay">Clay (holds water)</option></select></div></div>
+<div class="out" id="pout"></div>
+<details style="margin-top:12px"><summary><b>How to check soil moisture</b></summary><ol class="steps" style="margin-top:10px"><li>Push a finger 2–3 cm into the soil, about up to the first knuckle.</li><li>Dry and crumbly soil usually needs water. Cool, slightly damp soil can wait. Sticky or dripping soil should not be watered.</li><li>Lift the pot. A dry pot feels much lighter than a freshly watered one.</li><li>Push a wooden stick to the bottom and pull it out. If dark, wet soil sticks to it, wait.</li></ol></details>
+<div class='card' style='margin-top:16px'><h3>Soil moisture checker</h3><p class='muted' style='margin:6px 0 12px'>Do the finger test and lift the pot, then choose what you found. Do this before every watering, even when a reminder says it is time.</p><div class='form'><div><label for='mF'>Finger test (2–3 cm deep)</label><select id='mF'><option value='0'>Dry and crumbly</option><option value='1' selected>Slightly damp and cool</option><option value='2'>Wet or sticky</option></select></div><div><label for='mW'>Pot weight</label><select id='mW'><option value='0'>Very light</option><option value='1' selected>Normal</option><option value='2'>Heavy</option></select></div><div><label for='mT'>Plant type</label><select id='mT'><option value='e'>Likes even moisture (most vegetables, herbs, flowers)</option><option value='d'>Likes to dry out (aloe, snake plant, neem)</option></select></div></div><div class='out' id='mO'></div></div>
+</div>
+</section>
+
+<section class="sec" id="calendar">
+<h2>What to plant this month</h2>
+<p class="muted">Choose a month to see which plants from the library you can sow or plant now. These timings are for the North Indian plains (Bihar, Uttar Pradesh, Punjab). Hills, coastal areas and southern India have different seasons, so use them only as a rough guide there.</p>
+<div class="card">
+<div style="max-width:260px"><label for="mo">Month</label><select id="mo"></select></div>
+<div class="chips" id="cal" style="margin-top:14px"></div>
+</div>
+</section>
+
+<section class='sec' id='plantlab'>
+<h2><svg class='ic'><use href='#i-lab'/></svg>Plant Lab</h2>
+<p class='muted'>A virtual botanical laboratory. Change the growing conditions and watch what happens, then record your own real experiments. The water and nutrient experiment is just below.</p>
+<div class='card'>
+<div class='row'><h3>Growth simulator</h3><span class='flag'>Educational model, not a prediction</span></div>
+<div class='two' style='margin-top:14px'>
+<div><div class='scene'><svg viewBox='0 0 240 300' role='img' aria-label='Simulated plant'><circle cx='195' cy='45' r='22' fill='#f2a900'/><rect y='240' width='240' height='60' id='sSoil' fill='#8a6342'/><g id='sPl'></g></svg></div><div class='tl' id='sTl'></div></div>
+<div>
+<label for='sSp'>Plant</label><select id='sSp'></select>
+<div id='sCtl' style='margin-top:8px'></div>
+<div class='row'><label for='sDay'>Time</label><b id='sDv'>Day 0</b></div><input id='sDay' type='range' min='0' max='120' value='0'>
+<div class='chips'><button class='btn sm' id='sPlay' type='button'>Play</button></div>
+<p class='stage' id='sSt'></p><div class='out' id='sEx' style='margin-top:6px'></div>
+</div></div></div>
+<div class='card' style='margin-top:18px'>
+<h3>Experiment journal</h3>
+<p class='muted' style='margin:6px 0 14px'>Plan an experiment with a real plant, record dated observations with photos, and write a conclusion. Saved in this browser only.</p>
+<div class='form'><div><label for='xT'>Experiment title</label><input id='xT' type='text' maxlength='60' placeholder='Tulsi in sun vs shade'></div><div><label for='xP'>Plant</label><select id='xP'></select></div><div><label for='xO'>Objective</label><input id='xO' type='text' maxlength='140' placeholder='What do you want to find out?'></div><div><label for='xC'>Conditions</label><input id='xC' type='text' maxlength='140' placeholder='Water, light, soil, pot'></div></div>
+<div class='chips' style='margin-top:12px'><button class='btn' id='xAdd' type='button'>Create experiment</button><span class='muted' id='xMsg' role='status'></span></div>
+<div class='ggrid' id='xList'></div>
+</div>
+</section>
+
+<section class="sec" id="lab">
+<h2><svg class='ic'><use href='#i-lab'/></svg>Plant Lab: water and nutrient experiment</h2>
+<p class="muted">Move the sliders and see what happens to the plant. Water 100% means soaking wet soil. Fertilizer 100% means about 5 spoons of compost for a small pot.</p>
+<div class="card two">
+<div class="scene"><svg viewBox="0 0 240 300" role="img" aria-label="A plant that changes with water and fertilizer"><g id="ld"></g><rect id="ls" y="240" width="240" height="60" fill="#8a6342"/><ellipse id="lp" cx="120" cy="241" rx="0" ry="0" fill="#4aa3df" opacity=".75"/><g id="lg"></g><g id="lpl"></g></svg></div>
+<div>
+<div class="row"><label for="wi">💧 Water</label><b id="wv"></b></div>
+<input id="wi" type="range" min="0" max="100" value="50"><p class="muted" id="wm"></p>
+<div class="row" style="margin-top:12px"><label for="fi">🌿 Fertilizer (compost)</label><b id="fv"></b></div>
+<input id="fi" type="range" min="0" max="100" value="20"><p class="muted" id="fm"></p>
+<div class="row" style="margin-top:12px"><span>Plant health</span><b id="hv"></b></div>
+<div class="bar"><i id="hb"></i></div>
+<div class="out" style="margin-top:0"><b id="wh" style="font-size:1.05rem"></b><p id="wt"></p></div>
+<div class="out" style="margin-top:8px"><b id="fh" style="font-size:1.05rem"></b><p id="ft"></p></div>
+<div class="presets"><button class="btn alt" type="button" data-w="50" data-f="20">Ideal</button><button class="btn alt" type="button" data-w="5" data-f="20">Too dry</button><button class="btn alt" type="button" data-w="95" data-f="20">Too much water</button><button class="btn alt" type="button" data-w="50" data-f="85">Too much fertilizer</button></div>
+</div>
+</div>
+</section>
+
+<section class="sec" id="doctor">
+<h2><svg class='ic'><use href='#i-doc'/></svg>Plant doctor</h2>
+<p class="muted">Pick what you see on your plant to find the likely cause and the fix.</p>
+<div class="lib"><div class="list" id="dl"></div><div class="card" id="dr"></div></div>
+</section>
+
+<section class='sec' id='camera'>
+<h2><svg class='ic'><use href='#i-cam'/></svg>Plant Camera</h2>
+<p class='muted'>Take or upload a photo of a plant, choose a question and get an AI analysis. Your photo is sent for analysis only when you press Analyze. One photo cannot give a certain answer, so treat the results as careful suggestions.</p>
+<div class='card two'>
+<div>
+<div class='scene' style='min-height:220px;display:grid;place-items:center'><img id='cvImg' alt='Your plant photo' style='display:none;width:100%;max-height:380px;object-fit:contain'><span class='muted' id='cvEmpty'>No photo yet</span></div>
+<div class='chips' style='margin-top:12px'>
+<label class='btn sm' style='margin:0;display:inline-block'>Take photo<input id='cvCam' type='file' accept='image/*' capture='environment' hidden></label>
+<label class='btn alt sm' style='margin:0;display:inline-block'>Upload photo<input id='cvUp' type='file' accept='image/*' hidden></label>
+<button class='btn alt sm' id='cvRm' type='button' hidden>Remove</button>
+</div></div>
+<div>
+<label for='cvQ'>What do you want to know?</label><input id='cvQ' type='text' maxlength='200' value='What plant is this and how healthy does it look?'>
+<div class='chips' id='cvS' style='margin:10px 0'></div>
+<button class='btn' id='cvGo' type='button'>Analyze photo</button>
+<p class='muted' id='cvM' role='status' style='margin-top:8px'></p>
+<div class='out' id='cvOut' hidden style='white-space:pre-wrap'></div>
+<div class='chips' id='cvAct' style='margin-top:10px'></div>
+</div></div>
+<h3 style='margin-top:22px'>Photo history</h3><div class='ggrid' id='cvH'></div>
+</section>
+
+<section class='sec' id='harvest'>
+<h2><svg class='ic'><use href='#i-bask'/></svg>Harvest predictor</h2>
+<p class='muted'>Choose a plant and the date you sowed or transplanted it. You get a rough harvest window, the signs that it is ready and how to pick it. Timings are typical for the plains of North India. Varieties and weather can change them.</p>
+<div class='card'><div class='form'><div><label for='hP'>Plant</label><select id='hP'></select></div><div><label for='hD'>Date sowed or transplanted</label><input id='hD' type='date'></div></div><div class='out' id='hO'></div></div>
+</section>
+
+<section class='sec' id='assistant'>
+<h2><svg class='ic'><use href='#i-ai'/></svg>AI Gardening Assistant</h2>
+<p class='muted'>Ask any gardening question. The assistant reads the GreenLeaf plant library before it answers and says when it is unsure. AI answers can contain mistakes, so check important steps in the plant profile.</p>
+<div class='card'>
+<div class='form' style='margin-bottom:12px'>
+<div><label for='aL'>Reply language</label><select id='aL'><option value='English'>English</option><option value='Hindi'>Hindi (हिन्दी)</option></select></div>
+<div><label for='aH'>Chat history</label><select id='aH'></select></div>
+<div style='align-self:end'><button class='btn alt' id='aN' type='button'>New chat</button></div></div>
+<p class='muted' id='aCtx' style='min-height:1.4em'></p>
+<div class='chat' id='aC' role='log' aria-live='polite'></div>
+<div class='chips' id='aS' style='margin:10px 0'></div>
+<div class='mini'><input id='aI' type='text' maxlength='500' placeholder='Ask a gardening question' aria-label='Your question'><button class='btn' id='aG' type='button'>Send</button></div>
+<small class='muted' id='aM' role='status'></small>
+</div>
+</section>
+<a class='btn fab' href='#assistant'><svg class='ic'><use href='#i-ai'/></svg>Ask AI</a>
+
+<footer>GreenLeaf is a beginner guide. Amounts and dates are a starting point. Every garden is different, so check your soil with your finger and watch your plant.</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+const soilC=w=>`rgb(${mix([170,130,88],[62,42,28],Math.min(1,w/70)).join(',')})`;
+
+function plant(g,hue,dr,fl,pc='#ff7aa8'){
+ if(g<.03)return `<ellipse cx='120' cy='248' rx='9' ry='6' fill='#b98a4e'/>`;
+ const col=`hsl(${hue},58%,40%)`,sc=`hsl(${hue+8},45%,30%)`,H=g*185,tx=120-dr*14,ty=240-H*(1-dr*.3);
+ let s=`<line x1='120' y1='246' x2='${tx}' y2='${ty}' stroke='${sc}' stroke-width='${3+g*4}' stroke-linecap='round'/>`;
+ [[.3,22],[.55,32],[.8,26]].forEach(([p,z])=>{const t=cl((g-p*.6)/.2);if(t<=0)return;const y=240-H*p*(1-dr*.3),k=t*z/24;
+  [-1,1].forEach(d=>s+=`<g transform='translate(${120-dr*14*p} ${y}) scale(${d*k} ${k}) rotate(${-25+dr*85})'><path d='M0 0C14-16 38-14 46 0 38 14 14 16 0 0Z' fill='${col}'/><path d='M2 0H38' stroke='${sc}' stroke-width='1.5'/></g>`)});
+ s+=`<ellipse cx='${tx}' cy='${ty-6}' rx='${4+6*g}' ry='${7+8*g}' fill='${col}'/>`;
+ if(fl){let q='';for(let a=0;a<8;a++)q+=`<ellipse cy='-12' rx='5' ry='9' fill='${pc}' transform='rotate(${a*45})'/>`;s+=`<g transform='translate(${tx} ${ty-16})'>${q}<circle r='6' fill='#f2a900'/></g>`}
+ return s}
+
+/* Hero: growing plant */
+const ST=[[0,'Seed','The seed rests in the soil, waiting for water and warmth.'],[6,'Germination','The seed takes in water and splits open. A tiny root grows down.'],[15,'Sprout','A small stem pushes up through the soil to find light.'],[28,'Seedling','The first true leaves open and start making food from sunlight.'],[42,'Young plant','The stem gets taller, more leaves appear and the roots go deeper.'],[54,'Flowering','The plant blooms. Insects visit the flower and seeds will form.']];
+function grow(){const d=+$('gr').value,g=cl((d-12)/48),rp=cl((d-4)/40),L=rp*55;
+ $('gp').innerHTML=plant(g,112,0,d>=52);
+ $('gro').innerHTML=rp>0?`<path d='M120 246Q118 ${246+L*.6} 116 ${246+L}'/><path d='M119 ${246+L*.35}Q100 ${250+L*.5} ${96-rp*4} ${252+L*.6}'/><path d='M119 ${246+L*.5}Q140 ${252+L*.6} ${146+rp*4} ${256+L*.7}'/>`:'';
+ let s=ST[0];ST.forEach(x=>{if(d>=x[0])s=x});
+ $('gst').textContent=s[1];$('gtx').textContent=s[2];$('gd').textContent='Day '+d}
+let tm=null;const stop=()=>{clearInterval(tm);tm=null;$('gpl').textContent='Play'};
+$('gr').addEventListener('input',grow);
+$('gpl').onclick=()=>{if(tm){stop();return}if(+$('gr').value>=60)$('gr').value=0;$('gpl').textContent='Pause';tm=setInterval(()=>{$('gr').value=+$('gr').value+1;grow();if(+$('gr').value>=60)stop()},260)};
+$('grs').onclick=()=>{stop();$('gr').value=0;grow()};
+grow();
+
+/* Plant library */
+const P=[
+{n:'Marigold',e:'🌼',c:'Flowers',sun:'Full sun (6+ hours)',w:'Every 2 days. Keep soil lightly moist.',soil:'Loose garden soil mixed with compost',s:'Sow Jun–Oct',t:'50–60 days to first flowers',sz:'10–12 inch pot, or 25 cm apart',wl:2,m:[6,7,8,9,10],st:['Fill a pot with soil and compost. Sow seeds 1 cm deep.','Keep the soil damp. Seeds sprout in 5–7 days.','When the plant is about 15 cm tall, pinch off the top tip. This makes it bushy.','Remove faded flowers every few days so new buds keep coming.'],warn:'Wet leaves and heavy watering cause mildew and stem rot. Water the soil, not the leaves.',tip:'Plant a few marigolds near vegetables. Their strong smell may help keep some pests away.'},
+{n:'Rose',e:'🌹',c:'Flowers',sun:'Full sun (6+ hours)',w:'Deep watering 2–3 times a week',soil:'Rich, well-drained soil with compost',s:'Plant Oct–Feb (cool months)',t:'6–8 weeks to flowers after new growth',sz:'14–18 inch deep pot',wl:2,m:[10,11,12,1,2],st:['Buy a healthy grafted rose, or take a pencil-thick cutting about 20 cm long.','Plant in a deep pot with a drainage hole. Mix in 2 handfuls of compost.','Water deeply, then let the top 3 cm of soil dry before watering again.','Feed with compost every 4 weeks. Cut off dead flowers and weak stems.'],warn:'Black spots on leaves are a fungus. Water at the base in the morning and remove spotted leaves.',tip:'Cut just above an outward-facing bud. New stems then grow outward and the plant gets more air.'},
+{n:'Sunflower',e:'🌻',c:'Flowers',sun:'Full sun (6–8 hours)',w:'Deep watering every 2–3 days',soil:'Deep, loose soil with compost',s:'Sow Feb–Mar or Jul–Aug',t:'70–100 days to bloom',sz:'16 inch deep pot, or 30 cm apart',wl:2,m:[2,3,7,8],st:['Sow seeds 2–3 cm deep, one seed per spot.','Seeds sprout in 7–10 days. Keep only the strongest seedling.','Water deeply so roots grow down. Add a stake when the plant passes 60 cm.','When the back of the flower head turns brown, the seeds are ready.'],warn:'Tall plants fall in strong wind. Stake early and plant in a sheltered place.',tip:'For pots, choose a dwarf variety. Tall types need a lot of space.'},
+{n:'Hibiscus',e:'🌺',c:'Flowers',sun:'Full sun (5+ hours)',w:'Daily in summer, every 3–4 days in winter',soil:'Rich, well-drained soil with compost',s:'Plant Jun–Sep',t:'Cuttings root in 3–4 weeks, flowers in 2–3 months',sz:'14 inch pot, or 1 m apart',wl:3,m:[6,7,8,9],st:['Take a 20 cm cutting from a healthy stem and remove the lower leaves.','Plant in moist soil and keep in bright shade for 3–4 weeks.','Move to full sun when new leaves appear. Water often, but never let it sit in water.','Feed every 2 weeks while it flowers. Prune lightly after each flush of flowers.'],warn:'Buds that drop before opening usually mean irregular watering or a sudden change in light.',tip:'Mealybugs are common. Wipe them off, or spray neem oil in the evening.'},
+{n:'Tulsi (Holy basil)',e:'🌿',c:'Herbs & Veg',sun:'Direct sun (4–6 hours)',w:'A little every day in summer, less in winter',soil:'Light soil with compost, good drainage',s:'Sow Mar–Jul',t:'Seeds sprout in 7–14 days, leaves in 6–8 weeks',sz:'10–12 inch pot',wl:2,m:[3,4,5,6,7],st:['Sprinkle seeds on moist soil and cover with a thin layer of soil.','Keep in a warm, sunny spot. Water gently with a spray or small cup.','Move seedlings to separate pots when they have 4–6 leaves.','Pick leaves from the top. Pinch off flower spikes to keep the plant bushy.'],warn:'Waterlogged soil quickly leads to root rot and white fungus.',tip:'Remove flower spikes regularly. The plant then makes more leaves.'},
+{n:'Tomato',e:'🍅',c:'Herbs & Veg',sun:'Full sun (6–8 hours)',w:'Deep watering every 2–3 days, steady moisture',soil:'Rich soil with plenty of compost',s:'Sow Jul–Sep for a winter crop',t:'60–80 days from transplant to first fruit',sz:'15 inch deep pot (about 12 litres)',wl:3,m:[7,8,9],st:['Sow seeds in a small tray. Seedlings are ready in 4–5 weeks.','Transplant into a deep pot and bury the stem up to the first leaves.','Tie the plant to a stake. Remove small side shoots between the stem and a branch.','Feed every 2 weeks once flowers appear. Pick fruit when fully red and slightly soft.'],warn:'Uneven watering splits the fruit and causes dark rot at its bottom. Keep moisture steady.',tip:'Cover the soil with dry leaves (mulch) to hold moisture.'},
+{n:'Chilli',e:'🌶️',c:'Herbs & Veg',sun:'Full sun (6 hours)',w:'When the top 2 cm of soil is dry',soil:'Loose, well-drained soil with compost',s:'Sow Jun–Jul or Oct–Nov',t:'About 75–90 days to first harvest',sz:'12 inch pot',wl:2,m:[6,7,10,11],st:['Sow seeds in a tray. They need warmth and sprout in 7–14 days.','Transplant at 5–6 weeks, when seedlings have 6–8 leaves.','Water only when the top soil is dry. Feed every 2–3 weeks.','Pick chillies often. Regular picking encourages new fruit.'],warn:'Flowers falling off usually means extreme heat or very irregular watering.',tip:'Wash your hands after touching chillies and keep them away from your eyes.'},
+{n:'Mint (Pudina)',e:'🍃',c:'Herbs & Veg',sun:'Partial shade (3–5 hours of sun)',w:'Keep soil moist, every 1–2 days in summer',soil:'Rich, moist soil with compost',s:'Plant Feb–Mar and Jun–Sep',t:'First harvest in 4–6 weeks',sz:'10 inch pot, alone in its own pot',wl:3,m:[2,3,6,7,8,9],st:['Take a 10 cm stem cutting and remove the lower leaves.','Put it in a glass of water. Roots appear in 7–10 days.','Plant it in a pot of moist soil and keep it in bright shade.','Cut the top leaves often. Cut just above a pair of leaves and the plant will branch.'],warn:'Mint spreads fast and takes over other plants. Always grow it in its own pot.',tip:'Never let the soil dry out in hot weather, or the leaves turn brown.'},
+{n:'Mango',e:'🥭',c:'Trees',sun:'Full sun, all day',w:'Daily for 2 months after planting, then once a week',soil:'Deep, well-drained loam',s:'Plant Jul–Sep (monsoon)',t:'Grafted trees fruit in 3–5 years',sz:'8–10 m of space (or a dwarf variety in a very large pot)',wl:2,m:[7,8,9],st:['Dig a pit 1 m wide and 1 m deep. Mix the soil with about 10 kg of compost.','Plant a grafted sapling with the graft joint above the soil. Press the soil down.','Water well and add a stake for support. Give shade in the first summer.','Water every week in dry months. Remove flowers for the first 2 years so the tree builds a strong frame.'],warn:'Waterlogging kills young trees. Make sure the pit drains well.',tip:'Buy a grafted sapling from a trusted nursery. Trees grown from seed take much longer and fruit quality varies.'},
+{n:'Neem',e:'🌳',c:'Trees',sun:'Full sun',w:'Once a week in the first year, very little after',soil:'Almost any soil, even poor and dry soil',s:'Plant Jun–Aug',t:'Grows about 1 m a year',sz:'5–6 m of space',wl:1,m:[6,7,8],st:['Collect fresh neem seeds. They lose life quickly, so sow within a few days.','Sow in a bag of soil and sand, 1 cm deep. Seeds sprout in 1–3 weeks.','Move the sapling to the ground when it is 30–40 cm tall. Water every week.','Protect it from goats and cattle with a guard until the stem is strong.'],warn:'Neem does not like standing water. Do not plant it in a low area that floods.',tip:'Neem leaves and oil are used to make a natural spray against common garden pests.'},
+{n:'Guava',e:'🍐',c:'Trees',sun:'Full sun',w:'Every 3–4 days at first, then once a week',soil:'Sandy loam, well-drained',s:'Plant Feb–Mar or Jul–Aug',t:'Grafted plants fruit in 2–3 years',sz:'5–6 m of space, or a 20 inch pot',wl:2,m:[2,3,7,8],st:['Dig a pit 60 cm wide and deep. Mix in 5 kg of compost.','Plant a grafted sapling and water deeply.','Water often in the first year. Mulch the soil to hold moisture.','Prune after harvest to keep the tree low and bushy. Feed twice a year.'],warn:'Fruit flies attack ripe fruit. Cover young fruits with paper or cloth bags.',tip:'Fruit grows on new branches, so regular pruning gives more fruit.'},
+{n:'Money plant',e:'🪴',c:'Indoor',sun:'Bright indirect light',w:'Change water every 7–10 days. In soil, water when the top 3 cm is dry.',soil:'Plain water, or light potting soil',s:'Any month',t:'Roots appear in 2–3 weeks',sz:'A glass bottle, or 8 inch pot',wl:2,m:[1,2,3,4,5,6,7,8,9,10,11,12],st:['Cut a 15–20 cm stem with 2–3 nodes (small bumps where roots grow).','Put it in a glass of water so the nodes are under water and the leaves are above.','Change the water every week. Keep in bright light, but away from harsh direct sun.','When roots are 5 cm long, plant in soil or keep growing in water.'],warn:'It is toxic to pets and children if chewed. Keep it out of reach.',tip:'Yellow leaves mean too much water or too much harsh sun.'},
+{n:'Aloe vera',e:'🌵',c:'Indoor',sun:'Bright light (4–6 hours)',w:'Every 10–14 days, only when soil is fully dry',soil:'Sandy, gritty soil (garden soil mixed with sand)',s:'Plant Feb–May or Sep–Oct',t:'Baby plants appear after 6–12 months',sz:'8–10 inch pot with a drainage hole',wl:1,m:[2,3,4,5,9,10],st:['Use a pot with a drainage hole. Mix garden soil and sand 1:1.','Plant a baby plant. Do not bury the leaves.','Water deeply, then wait until the soil is fully dry before watering again.','Cut outer, older leaves close to the stem when you need them. Separate babies when they have 4 leaves.'],warn:'Overwatering is the main killer. Soft, mushy leaves mean root rot.',tip:'In winter, water only about once a month.'}];
+P.push(
+{n:'Jasmine (Mogra)',sci:'Jasminum sambac',e:'🤍',c:'Flowers',sun:'Full sun (5–6 hours)',w:'2–3 times a week in summer, less in winter',soil:'Rich, well-drained soil with compost',s:'Plant Feb–Mar or Jul–Sep',t:'Flowers mainly in the warm months, after the plant is established',sz:'14 inch pot, or 1 m apart',wl:2,m:[2,3,7,8,9],st:['Take a 15–20 cm cutting from a mature stem, or buy a nursery plant.','Plant in a pot with drainage holes. Mix in compost and keep the soil moist, not soggy.','Keep in full sun. Tie long stems to a support.','Prune lightly in Feb–Mar to shape the plant and remove weak stems.'],warn:'Too little sun gives many leaves but few flowers. Spider mites and bud worms can damage buds.',tip:'Pick flowers in the early morning, when the buds are just opening.'},
+{n:'Brinjal (Eggplant)',sci:'Solanum melongena',e:'🍆',c:'Herbs & Veg',sun:'Full sun (6–8 hours)',w:'Every 2–3 days, steady moisture',soil:'Rich, well-drained loam with compost',s:'Sow Jun–Jul or Oct–Nov',t:'About 70–90 days from transplant to first harvest',sz:'15 inch deep pot, or 60 cm apart',wl:3,m:[6,7,10,11],st:['Sow seeds in a tray. Keep warm. Seedlings are ready in 4–5 weeks.','Transplant into rich soil and water well.','Stake the plant when it carries fruit. Mulch to hold moisture.','Feed every 2–3 weeks. Pick fruit while the skin is shiny and glossy.'],warn:'Shoot and fruit borer is a common pest. Remove and destroy damaged shoots and fruit early.',tip:'Check the underside of leaves every week for whitefly and mites.'},
+{n:'Okra (Bhindi)',sci:'Abelmoschus esculentus',e:'🥒',c:'Herbs & Veg',sun:'Full sun (6+ hours)',w:'Every 2–3 days, more in hot weather',soil:'Loose, well-drained soil with compost',s:'Sow Feb–Mar or Jun–Jul',t:'Seeds sprout in 5–10 days, pods in 45–60 days',sz:'12 inch deep pot, or 30 cm apart',wl:2,m:[2,3,6,7],st:['Soak seeds in water overnight to speed up sprouting.','Sow 2–3 cm deep in warm soil. Thin to the strongest seedling.','Water regularly and feed every 3 weeks once flowering starts.','Pick pods every 1–2 days when they are young and about 8–10 cm long.'],warn:'Yellow vein mosaic virus, spread by whitefly, turns leaf veins yellow. Remove affected plants.',tip:'Pods turn hard and woody quickly. Harvest often so the plant keeps producing.'},
+{n:'Spinach (Palak)',sci:'Spinacia oleracea',e:'🥬',c:'Herbs & Veg',sun:'Partial sun (4–6 hours)',w:'Keep soil evenly moist',soil:'Rich, moist, well-drained soil',s:'Sow Oct–Feb (cool season)',t:'Seeds sprout in 7–10 days, first harvest in 30–45 days',sz:'8 inch deep pot, plants 10 cm apart',wl:3,m:[10,11,12,1,2],st:['Sow seeds 1–2 cm deep in rows and keep the soil moist.','Thin seedlings to about 10 cm apart.','Water often and give light shade in warm afternoons.','Cut outer leaves first and leave the centre to keep growing.'],warn:'Spinach goes to seed (bolts) in hot weather and leaves become bitter. Sow only in the cool season.',tip:'Sow a small batch every 2 weeks for a steady supply.'},
+{n:'Coriander (Dhania)',sci:'Coriandrum sativum',e:'🌱',c:'Herbs & Veg',sun:'Partial sun (4–5 hours)',w:'Every 1–2 days, keep soil lightly moist',soil:'Loose, well-drained soil',s:'Sow Oct–Feb (cool season)',t:'Seeds sprout in 7–14 days, leaves in 30–40 days',sz:'8–10 inch pot, seeds spread evenly',wl:2,m:[10,11,12,1,2],st:['Crush the whole seeds lightly to split them. Soak for 8–12 hours.','Sprinkle on moist soil and cover with 1 cm of soil.','Keep in bright light with some shade in the afternoon.','Cut leaves with scissors, leaving 3–4 cm of stem so they regrow.'],warn:'It bolts quickly in heat. Sow again every 2–3 weeks.',tip:'Let a few plants flower. The dried seeds are coriander seeds for next season.'},
+{n:'Papaya',sci:'Carica papaya',e:'🍈',c:'Trees',sun:'Full sun',w:'Regular watering, but never waterlogged',soil:'Very well-drained, rich soil',s:'Plant Feb–Mar or Jul–Sep',t:'First fruit in about 9–12 months',sz:'About 2 m apart, or a very large pot',wl:2,m:[2,3,7,8,9],st:['Raise seedlings in bags. Move to the ground at about 30 cm tall.','Plant on a small mound so water drains away from the stem.','Water regularly and mulch around the plant, not touching the stem.','Feed every 1–2 months with compost.'],warn:'Papaya is damaged by waterlogging and by frost. Protect young plants in cold winter nights.',tip:'Plant 2–3 seedlings together at first. Some plants will be male and not give fruit.'},
+{n:'Lemon',sci:'Citrus limon',e:'🍋',c:'Trees',sun:'Full sun (6+ hours)',w:'Deep watering 1–2 times a week',soil:'Well-drained loam, slightly acidic to neutral',s:'Plant Jul–Sep or Feb–Mar',t:'Grafted plants may fruit in 2–4 years',sz:'18–20 inch pot, or 4–5 m apart',wl:2,m:[2,3,7,8,9],st:['Buy a grafted plant from a trusted nursery.','Plant with the graft joint above the soil. Mix in compost.','Water deeply, then let the top 3 cm dry. Mulch the soil.','Feed every 6–8 weeks in the growing season. Remove dead twigs.'],warn:'Yellow leaves with green veins can mean a nutrient problem. Check watering and drainage first.',tip:'Remove any shoots that grow from below the graft joint.'},
+{n:'Snake plant',sci:'Dracaena trifasciata',e:'🌿',c:'Indoor',sun:'Low to bright indirect light',w:'Every 2–3 weeks, only when soil is dry',soil:'Gritty, fast-draining soil (soil mixed with sand)',s:'Any month',t:'Very slow growth; new leaves appear in the warm months',sz:'6–8 inch pot with a drainage hole',wl:1,m:[1,2,3,4,5,6,7,8,9,10,11,12],st:['Use a heavy pot with a drainage hole and gritty soil.','Place in a spot with indirect light. It also tolerates low light.','Water deeply, then wait until the soil is completely dry.','To multiply, divide the root clump or cut a leaf into pieces and plant them.'],warn:'Overwatering causes root rot. It is mildly toxic to pets if eaten.',tip:'Leaf cuttings of striped varieties may grow plain green. Use division to keep the pattern.'});
+const SCI={'Marigold':'Tagetes erecta','Rose':'Rosa × hybrida','Sunflower':'Helianthus annuus','Hibiscus':'Hibiscus rosa-sinensis','Tulsi (Holy basil)':'Ocimum tenuiflorum','Tomato':'Solanum lycopersicum','Chilli':'Capsicum annuum','Mint (Pudina)':'Mentha arvensis','Mango':'Mangifera indica','Neem':'Azadirachta indica','Guava':'Psidium guajava','Money plant':'Epipremnum aureum','Aloe vera':'Aloe vera'};
+P.forEach(p=>{p.sci=p.sci||SCI[p.n]});
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let fav=ld('gl_fav',[]);
+const CATS=['Flowers','Herbs & Veg','Trees','Indoor','Saved'];let cat='Flowers',sel=0,qs='';
+const show=p=>qs?(p.n+' '+p.sci+' '+p.c).toLowerCase().includes(qs):(cat==='Saved'?fav.includes(p.n):p.c===cat);
+function lib(){
+ $('tabs').innerHTML=CATS.map(c=>`<button class='tab' role='tab' aria-selected='${c===cat}' data-c='${c}'>${c}</button>`).join('');
+ $('list').innerHTML=P.map((p,i)=>show(p)?`<button class='pc' aria-pressed='${i===sel}' data-i='${i}'><span>${p.e}</span><b>${p.n}</b></button>`:'').join('')||`<p class='muted'>${cat==='Saved'&&!qs?'No saved plants yet. Open a plant and press Save.':'No plants found. Try another search.'}</p>`;
+ const p=P[sel];
+ $('det').innerHTML=`<div class='dh'><span class='big'>${p.e}</span><div><h3>${p.n}</h3><em class='muted'>${p.sci}</em><br><span class='tag'>${p.c}</span></div></div><div class='chips' style='margin-top:12px'><button class='btn alt sm' data-fav='${p.n}'>${fav.includes(p.n)?'★ Saved':'☆ Save'}</button><button class='btn sm' data-add='1'>Add to my garden</button><button class='btn alt sm' data-ask='1'>Ask AI</button></div><div class='kv'>${[['☀️ Sunlight',p.sun],['💧 Water',p.w],['🪴 Soil',p.soil],['📅 Best time',p.s],['⏱️ How long',p.t],['📏 Space',p.sz]].map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('')}</div><h4>How to grow it</h4><ol class='steps'>${p.st.map(x=>`<li>${x}</li>`).join('')}</ol><div class='note warn'><b>Watch out:</b> ${p.warn}</div><div class='note tip'><b>Pro tip:</b> ${p.tip}</div>`}
+$('tabs').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;cat=b.dataset.c;qs='';$('q').value='';const f=P.findIndex(show);if(f>=0)sel=f;lib()};
+$('q').addEventListener('input',e=>{qs=e.target.value.trim().toLowerCase();const f=P.findIndex(show);if(f>=0)sel=f;lib()});
+$('det').onclick=e=>{const f=e.target.closest('[data-fav]');if(f){const n=f.dataset.fav;fav=fav.includes(n)?fav.filter(x=>x!==n):[...fav,n];sv('gl_fav',fav);lib();return}if(e.target.closest('[data-add]')){$('gaPl').value=sel;$('gaW').value=defW(sel);$('garden').scrollIntoView()}if(e.target.closest('[data-ask]'))askAbout(sel)};
+$('list').onclick=e=>{const b=e.target.closest('[data-i]');if(!b)return;sel=+b.dataset.i;lib()};
+function openPlant(i){sel=i;cat=P[i].c;lib();$('library').scrollIntoView()}
+lib();
+
+/* Water planner */
+$('pl').innerHTML=P.map((p,i)=>p.c==='Trees'?'':`<option value='${i}'>${p.n}</option>`).join('');
+function plan(){const p=P[+$('pl').value],base=[150,400,800][+$('ps').value],se=$('se').value;
+ const iv={1:10,2:3,3:2}[p.wl]*{sandy:.8,loam:1,clay:1.3}[$('so').value]*($('lo').value==='indoor'?1.3:1),f={summer:[1.2,.6],monsoon:[.6,2],winter:[.8,1.7]}[se];
+ const ml=Math.round(base*f[0]/10)*10,d=Math.max(1,Math.round(iv*f[1]));
+ $('pout').innerHTML=`<p><b>${ml} ml</b> of water, about every <b>${d} day${d>1?'s':''}</b></p><p class='muted'>This is only a starting estimate. Real needs depend on weather, drainage and the plant. Always push a finger 2–3 cm into the soil first. Water only if it feels dry. Pour slowly until water drains from the bottom hole.${se==='monsoon'?' Skip watering on rainy days.':''} For trees, see the library.</p>`}
+['pl','ps','se','lo','so'].forEach(i=>$(i).addEventListener('change',plan));plan();
+
+/* Calendar */
+const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+$('mo').innerHTML=MN.map((m,i)=>`<option value='${i+1}'>${m}</option>`).join('');$('mo').value=new Date().getMonth()+1;
+function cal(){const m=+$('mo').value;
+ $('cal').innerHTML=P.map((p,i)=>p.m.includes(m)?`<button class='btn alt' type='button' data-i='${i}'>${p.e} ${p.n}</button>`:'').join('')||'<p class="muted">Nothing is ideal to sow this month. Focus on care and watering.</p>'}
+$('mo').addEventListener('change',cal);
+$('cal').onclick=e=>{const b=e.target.closest('[data-i]');if(b)openPlant(+b.dataset.i)};cal();
+
+/* Care lab */
+const wi=$('wi'),fi=$('fi');
+function lab(){
+ const w=+wi.value,f=+fi.value;
+ const wS=(w>=35&&w<=65)?1:(w<35?w/35:Math.max(0,(100-w)/35));
+ const fS=(f>=8&&f<=35)?1:(f<8?.6+f/20:Math.max(0,(70-f)/35));
+ const hp=Math.round((.6*wS+.4*fS)*100);
+ const yel=w>65?Math.min(1,(w-65)/35):0,brn=Math.max(w<35?(35-w)/35:0,f>35?Math.min(1,(f-35)/35):0);
+ const dr=w<30?(30-w)/30:(w>85?(w-85)/15:0);
+ const hue=Math.max(22,112-55*yel-85*brn),grow=.35+.65*(.6*wS+.4*fS)+((f>=8&&f<=35)?.1:0);
+ $('lpl').innerHTML=plant(Math.min(1,(60+grow*110)/185),hue,Math.min(1,dr),hp>=90);
+ $('ls').setAttribute('fill',soilC(w));
+ const pd=$('lp');pd.setAttribute('rx',w>80?20+(w-80)*4:0);pd.setAttribute('ry',w>80?3+(w-80)*.3:0);
+ let g='',d='';for(let i=0;i<Math.round(f/5);i++)g+=`<circle cx='${20+(i*53)%200}' cy='${248+(i*29)%40}' r='3.2' fill='${f>60?'#f2e9c9':'#d9b25a'}'/>`;
+ for(let i=0;i<Math.round(w/14);i++){const x=24+(i*37)%190,y=20+(i*61)%150;d+=`<path d='M${x} ${y}q5 9 0 13q-5-4 0-13z' fill='#4aa3df' opacity='.8'/>`}
+ $('lg').innerHTML=g;$('ld').innerHTML=d;
+ $('wv').textContent=w+'%';$('fv').textContent=f+'%';
+ $('wm').textContent='For a small pot: about '+Math.round(w*2.5)+' ml of water';
+ $('fm').textContent='About '+(f/20).toFixed(1)+' spoons of compost';
+ $('hv').textContent=hp+'%';const hb=$('hb');hb.style.width=hp+'%';hb.style.background=hp>=75?'var(--green)':(hp>=45?'var(--sun)':'#d9534f');
+ const wt=w<15?['Far too little water','The soil is dry. Leaves wilt and droop.']:w<35?['A little too dry','The plant is thirsty and the leaves start to droop.']:w<=65?['Perfect water level','Soil is damp, not soaking. Roots get both water and air.']:w<=85?['A little too much water','The soil stays too wet and leaves start to turn yellow.']:['Far too much water','Roots cannot breathe. They start to rot and the plant can die.'];
+ const ft=f<5?['No fertilizer','The plant survives but grows slowly.']:f<=35?['Good amount of fertilizer','The plant gets nutrients and grows green and strong.']:f<=60?['A little too much fertilizer','Salt builds up in the soil and leaf edges turn brown.']:['Far too much fertilizer','The roots get burned and the plant can dry out.'];
+ $('wh').textContent=wt[0];$('wt').textContent=wt[1];$('fh').textContent=ft[0];$('ft').textContent=ft[1]}
+wi.addEventListener('input',lab);fi.addEventListener('input',lab);
+document.querySelectorAll('.presets button').forEach(b=>b.onclick=()=>{wi.value=b.dataset.w;fi.value=b.dataset.f;lab()});lab();
+
+/* Plant doctor */
+const D=[['🟡 Yellow leaves, wet soil','Too much water or poor drainage.','Stop watering until the top 3 cm of soil is dry. Make sure the pot has a drainage hole.'],
+['🟤 Brown, crispy leaf tips','Too little water, hot dry air, or too much fertilizer.','Water deeply, move the plant away from hot wind, and flush the soil with plain water if you fertilized recently.'],
+['📏 Tall, thin, pale stems','Not enough light.','Move the plant to a brighter place, such as a sunny window or an open terrace.'],
+['😴 Drooping leaves, dry soil','The plant is thirsty.','Water slowly until water drains from the bottom. It usually recovers in a few hours.'],
+['⚪ White powder on leaves','Powdery mildew, a fungus.','Remove badly affected leaves, give the plant more air space and spray neem oil in the evening.'],
+['🐛 Sticky leaves or tiny insects','Aphids or mealybugs.','Wash them off with water. Spray neem oil mixed with a little liquid soap in the evening, every 5–7 days.'],
+['🌸 Many leaves, no flowers','Too little sun, too much nitrogen fertilizer, or the plant is still young.','Give at least 6 hours of sun, avoid extra nitrogen fertilizer and be patient with young plants.']];
+let di=0;
+function doc(){$('dl').innerHTML=D.map((x,i)=>`<button class='pc' aria-pressed='${i===di}' data-i='${i}'><b>${x[0]}</b></button>`).join('');
+ const x=D[di];$('dr').innerHTML=`<h3>${x[0]}</h3><h4>Likely cause</h4><p>${x[1]}</p><h4>What to do</h4><div class='note tip'>${x[2]}</div>`}
+$('dl').onclick=e=>{const b=e.target.closest('[data-i]');if(b){di=+b.dataset.i;doc()}};doc();
+
+/* My garden: saved in this browser */
+let garden=ld('gl_garden',[]);
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d},pd=s=>new Date(s+'T00:00:00'),iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)},diff=(a,b)=>Math.round((a-b)/864e5);
+const addD=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return d},fd=d=>d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+const HV={'Tomato':[60,80,'transplanting','The fruit is fully coloured for its variety (usually red) and slightly soft when pressed gently.','Twist the fruit gently or cut it with its stalk. Pick every 2–3 days.'],'Chilli':[75,90,'transplanting','Green chillies can be picked when firm, glossy and full size for the variety. Leave them longer for ripe red chillies.','Cut with the stalk using clean scissors. Regular picking encourages more fruit.'],'Brinjal (Eggplant)':[70,90,'transplanting','The skin is shiny and smooth and springs back slightly when pressed. Dull, hard skin means it is overripe.','Cut with 2–3 cm of stalk using clean scissors. Do not pull the fruit.'],'Okra (Bhindi)':[45,60,'sowing','Pods are about 8–10 cm long and snap easily. Older pods become hard and woody.','Cut the pod stalk with a knife or scissors every 1–2 days.'],'Spinach (Palak)':[30,45,'sowing','The leaves are large enough to eat, before a flower stalk forms.','Cut the outer leaves first and leave the centre to keep growing.'],'Coriander (Dhania)':[30,40,'sowing','The plants are well leafed and have not yet formed flower stalks.','Cut with scissors, leaving 3–4 cm of stem so the plant regrows.'],'Mint (Pudina)':[28,42,'planting the cutting','The plant has many branches with full, healthy leaves.','Cut just above a pair of leaves. The plant will branch from there.'],'Tulsi (Holy basil)':[42,56,'sowing','The plant is bushy with many full leaves.','Pick leaves from the top and pinch off flower spikes to keep it bushy.'],'Papaya':[270,365,'planting','The fruit skin starts to turn from green to yellow. A yellow streak near the base means it is ready.','Twist and lift gently, or cut with a short stalk. Handle gently because the skin bruises easily.']};
+const win=(s,h)=>`${fd(addD(s,h[0]))} to ${fd(addD(s,h[1]))}`;
+const gr=(hs,f,u)=>{const a=hs.filter(x=>x[f]>0);if(!a.length)return '';const l=a[a.length-1];let s=`${u}: ${l[f]} cm`;const o=a.slice(0,-1).reverse().find(x=>diff(pd(l.d),pd(x.d))>=25)||a[0];if(o!==l){const n=diff(pd(l.d),pd(o.d)),c=l[f]-o[f];s+=` (${c>=0?'+':''}${c.toFixed(1)} cm in ${n} day${n>1?'s':''})`}return s};
+const defW=i=>({1:10,2:3,3:2}[P[i].wl]);
+$('gaPl').innerHTML=P.map((p,i)=>`<option value='${i}'>${p.n}</option>`).join('');
+$('gaDate').value=iso(today());$('gaW').value=defW(0);
+$('gaPl').onchange=()=>{$('gaW').value=defW(+$('gaPl').value)};
+const late=(last,n)=>diff(today(),pd(last))-n;
+const badge=n=>n>0?`<span class='badge late'>Overdue by ${n} day${n>1?'s':''}</span>`:n===0?`<span class='badge due'>Due today</span>`:`<span class='badge ok'>In ${-n} day${n<-1?'s':''}</span>`;
+function gard(){let od=0,dt=0;
+ $('gaList').innerHTML=garden.map(g=>{const p=P.find(x=>x.n===g.pid),nw=late(g.lw,g.w),nf=late(g.lf,g.f);[nw,nf].forEach(n=>{if(n>0)od++;else if(n===0)dt++});
+  const age=diff(today(),pd(g.on)),h=g.hs,hl=h.length?h[h.length-1]:null;
+  return `<div class='card'><div class='dh'><span style='font-size:2rem'>${p.e}</span><div><b>${esc(g.nick)||p.n}</b><br><small class='muted'>${g.nick?p.n+' · ':''}${age>=0?'Day '+age:'Planting in '+(-age)+' days'}</small></div><button class='btn alt sm' data-del='${g.id}' style='margin-left:auto'>Remove</button></div><p style='margin-top:10px'>💧 Water every ${g.w} days: ${badge(nw)}${nw>=0?`<br><small class='muted'>Check the soil first. Water only if it is dry 2–3 cm down.</small>`:''}</p><p>🌿 Feed every ${g.f} days: ${badge(nf)}</p>${HV[g.pid]?`<p>🧺 Harvest window: ${win(g.on,HV[g.pid])}</p>`:''}<div class='chips' style='margin-top:8px'><button class='btn sm' data-w='${g.id}'>Watered today</button><button class='btn alt sm' data-f='${g.id}'>Fed today</button></div><div class='mini'><input type='number' step='0.1' min='0' placeholder='Height (cm)' aria-label='Height in cm' id='h${g.id}'><input type='number' step='0.1' min='0' placeholder='Width (cm)' aria-label='Width in cm' id='w${g.id}'><button class='btn alt sm' data-h='${g.id}'>Log size</button></div><small class='muted' style='display:block'>${[gr(h,'v','Height'),gr(h,'w','Width')].filter(Boolean).join(' · ')}</small><div class='mini'><input type='text' maxlength='120' placeholder='Add a note' aria-label='Note' id='n${g.id}'><button class='btn alt sm' data-n='${g.id}'>Save note</button></div>${g.notes.slice(-3).reverse().map(n=>`<small class='muted' style='display:block'>${n.d}: ${esc(n.t)}</small>`).join('')}</div>`}).join('');
+ $('gaSum').textContent=garden.length?`${garden.length} plant${garden.length>1?'s':''} · ${od} overdue task${od===1?'':'s'} · ${dt} due today`:'Your garden is empty. Add your first plant above.'}
+$('gaAdd').onclick=()=>{const w=+$('gaW').value,f=+$('gaF').value,dt=$('gaDate').value;
+ if(!dt||!(w>=1)||!(f>=7)){$('gaMsg').textContent='Please enter a date, watering days (1 or more) and feeding days (7 or more).';return}
+ garden.push({id:Date.now(),pid:P[+$('gaPl').value].n,nick:$('gaNick').value.trim(),on:dt,w,f,lw:dt,lf:dt,notes:[],hs:[]});
+ sv('gl_garden',garden);$('gaNick').value='';$('gaMsg').textContent='Added to your garden.';gard()};
+$('gaList').onclick=e=>{const b=e.target.closest('button');if(!b)return;const D=b.dataset,id=+(D.w||D.f||D.h||D.n||D.del),g=garden.find(x=>x.id===id),t=iso(today());
+ if(D.del)garden=garden.filter(x=>x.id!==id);
+ else if(!g)return;
+ else if(D.w)g.lw=t;
+ else if(D.f)g.lf=t;
+ else if(D.h){const v=parseFloat($('h'+id).value),w=parseFloat($('w'+id).value);if(!(v>0)&&!(w>0))return;g.hs.push({v:v>0?v:null,w:w>0?w:null,d:t})}
+ else if(D.n){const v=$('n'+id).value.trim();if(!v)return;g.notes.push({t:v,d:t})}
+ sv('gl_garden',garden);gard()};
+gard();
+
+/* ---- Plant Lab: growth simulator (simplified educational model) ---- */
+const trap=(x,a,b,c,d)=>x<=a||x>=d?0:x<b?(x-a)/(b-a):x<=c?1:(d-x)/(d-c);
+const SP={Tomato:{t:[10,20,27,35],sun:6,d:[7,25,55,75],fruit:'#e04b3a',pc:'#f2c200'},Sunflower:{t:[8,18,30,38],sun:7,d:[7,20,60,85],fruit:'',pc:'#f5b800'},Marigold:{t:[8,18,28,35],sun:6,d:[6,20,45,60],fruit:'',pc:'#f08a00'},Chilli:{t:[12,22,32,38],sun:6,d:[10,35,70,90],fruit:'#d63a2f',pc:'#ffffff'}};
+const SN=['Seed','Germination','Seedling','Vegetative growth','Flowering','Fruiting'];
+const CT=[['w','Water','%',0,100,50],['s','Sunlight','h',0,12,8],['q','Soil quality','%',0,100,70],['n','Nutrients','%',0,100,40],['t','Temperature','°C',5,45,26]];
+$('sCtl').innerHTML=CT.map(([k,l,u,a,b,v])=>`<div class='row'><label for='c${k}'>${l}</label><b id='v${k}'></b></div><input id='c${k}' type='range' min='${a}' max='${b}' value='${v}'>`).join('');
+$('sSp').innerHTML=Object.keys(SP).map(n=>`<option>${n}</option>`).join('');
+const MS={w:'Water is outside the comfortable range. Both dry and waterlogged soil slow growth.',s:'Sunlight is too low for this plant. These plants like 6 or more hours of sun.',q:'Poor soil limits roots and growth. Compost and good drainage help.',n:'Nutrients are too low or too high. Too little slows growth and too much can burn roots.',t:'Temperature is outside the best range for this plant. Growth slows in cold and in heat.'};
+function sim(){
+ const sp=SP[$('sSp').value],V={};CT.forEach(([k,,u])=>{V[k]=+$('c'+k).value;$('v'+k).textContent=V[k]+(u==='%'?'%':u==='h'?' hours':u)});
+ const F={w:trap(V.w,0,35,65,110),s:trap(V.s,.5,sp.sun,12,13.5),q:.3+.7*V.q/100,n:.45+.55*trap(V.n,-1,25,60,110),t:trap(V.t,...sp.t)};
+ const rate=Math.pow(F.w*F.s*F.q*F.n*F.t,.35),day=+$('sDay').value,e=day*rate,d=sp.d;
+ const si=e<2?0:e<d[0]?1:e<d[1]?2:e<d[2]?3:e<d[3]?4:5,names=[...SN];if(!sp.fruit)names[5]='Seed formation';
+ $('sTl').innerHTML=names.map((n,i)=>`<span class='${i===si?'on':''}'>${n}</span>`).join('');
+ const g=si===0?0:cl(e/d[2]*.95+.05),dr=Math.min(1,V.w<30?(30-V.w)/30:V.w>85?(V.w-85)/15:0);
+ let p=plant(g,28+rate*84,dr,si>=4,sp.pc);
+ if(si===5&&sp.fruit){const ty=240-185*g*(1-dr*.3)+36,tx=120-dr*14;p+=[-18,16,-4].map((x,i)=>`<circle cx='${tx+x}' cy='${ty+i*14}' r='7' fill='${sp.fruit}'/>`).join('')}
+ $('sPl').innerHTML=p;$('sSoil').setAttribute('fill',soilC(V.w));
+ $('sDv').textContent='Day '+day;$('sSt').textContent=names[si];
+ const bad=Object.keys(F).filter(k=>F[k]<.75).sort((a,b)=>F[a]-F[b]);
+ $('sEx').innerHTML=`<b>Simulated growth speed: ${Math.round(rate*100)}%</b><p>${rate===0?'Growth has stopped. At least one condition is outside this plant’s survival range.':bad.length?bad.map(k=>MS[k]).join(' '):'All conditions are in a good range, so the plant grows at its best simulated speed.'}</p><p class='muted'>This is a simplified model for learning. Real plants depend on many more factors.</p>`}
+$('sSp').addEventListener('change',sim);CT.forEach(([k])=>$('c'+k).addEventListener('input',sim));$('sDay').addEventListener('input',sim);
+let sT=null;$('sPlay').onclick=()=>{if(sT){clearInterval(sT);sT=null;$('sPlay').textContent='Play';return}if(+$('sDay').value>=120)$('sDay').value=0;$('sPlay').textContent='Pause';sT=setInterval(()=>{$('sDay').value=+$('sDay').value+1;sim();if(+$('sDay').value>=120){clearInterval(sT);sT=null;$('sPlay').textContent='Play'}},90)};
+sim();
+
+/* ---- Plant Lab: experiment journal ---- */
+let exps=ld('gl_exp',[]);
+$('xP').innerHTML=P.map(p=>`<option>${p.n}</option>`).join('');
+const svx=()=>{try{localStorage.setItem('gl_exp',JSON.stringify(exps));return true}catch(e){$('xMsg').textContent='Storage is full. Remove a photo or an experiment.';return false}};
+const shrink=f=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.6))};im.onerror=()=>r('');im.src=fr.result};fr.onerror=()=>r('');fr.readAsDataURL(f)});
+function exr(){$('xList').innerHTML=exps.length?exps.map(x=>`<div class='card'><b>${esc(x.title)}</b><br><small class='muted'>${esc(x.pid)} · started ${x.start}</small><p style='margin-top:8px'><b>Objective:</b> ${esc(x.obj)||'Not set'}</p><p><b>Conditions:</b> ${esc(x.cond)||'Not set'}</p>${x.obs.map(o=>`<div class='note tip'><small class='muted'>${o.d}</small><br>${esc(o.t)}${o.img?`<br><img src='${o.img}' alt='Experiment photo' style='width:100%;border-radius:10px;margin-top:6px'>`:''}</div>`).join('')}<div class='mini'><input type='text' maxlength='200' id='ot${x.id}' placeholder='Add an observation' aria-label='Observation'></div><div class='mini'><input type='file' accept='image/*' id='oi${x.id}' aria-label='Photo'><button class='btn alt sm' data-o='${x.id}'>Add</button></div><div class='mini'><input type='text' maxlength='300' id='oc${x.id}' value='${esc(x.concl).replace(/'/g,'&#39;')}' placeholder='Conclusion' aria-label='Conclusion'><button class='btn alt sm' data-c='${x.id}'>Save</button></div><button class='btn alt sm' data-x='${x.id}' style='margin-top:8px'>Delete</button></div>`).join(''):`<p class='muted'>No experiments yet. Create your first one above.</p>`}
+$('xAdd').onclick=()=>{const t=$('xT').value.trim();if(!t){$('xMsg').textContent='Please enter a title.';return}exps.unshift({id:Date.now(),title:t,pid:$('xP').value,obj:$('xO').value.trim(),cond:$('xC').value.trim(),start:iso(today()),obs:[],concl:''});if(svx()){['xT','xO','xC'].forEach(i=>$(i).value='');$('xMsg').textContent='Experiment created.';exr()}};
+$('xList').onclick=async e=>{const b=e.target.closest('button');if(!b)return;const D=b.dataset,id=+(D.o||D.c||D.x),x=exps.find(z=>z.id===id);if(!x)return;
+ if(D.x)exps=exps.filter(z=>z.id!==id);
+ else if(D.c)x.concl=$('oc'+id).value.trim();
+ else if(D.o){const t=$('ot'+id).value.trim(),f=$('oi'+id).files[0];if(!t&&!f)return;const img=f?await shrink(f):'';x.obs.push({d:iso(today()),t,img})}
+ svx();exr()};
+exr();
+
+/* ---- AI Gardening Assistant (uses the viewer-granted Claude capability) ---- */
+let chats=ld('gl_chats',[]),cur=null,ctxP=null,busy=false;
+const SUG=['How do I grow a mango tree?','Why are my tomato leaves turning yellow?','What can I plant on a balcony this month?','How do I make compost at home?'];
+const prof=p=>({name:p.n,scientific:p.sci,category:p.c,sunlight:p.sun,water:p.w,soil:p.soil,bestTime:p.s,duration:p.t,space:p.sz,steps:p.st,commonProblem:p.warn,tip:p.tip});
+const short=p=>p.n.split(' (')[0].toLowerCase();
+const fmt=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+const csave=()=>{if(!chats.includes(cur))chats.unshift(cur);chats=chats.slice(0,20);sv('gl_chats',chats)};
+function hl(){$('aH').innerHTML="<option value=''>Current chat</option>"+chats.map((c,i)=>`<option value='${i}'>${esc(c.title)}</option>`).join('')}
+function rc(){const m=cur.msgs;$('aC').innerHTML=m.length?m.map((x,i)=>x.r==='u'?`<div class='msg u'>${fmt(x.t)}</div>`:`<div class='msg a${x.o?' o':''}'>${fmt(x.t)}</div><div class='chips' style='margin:-4px 0 4px'>${x.o?`<small class='muted'>Offline help from the library. This is not an AI answer.</small>`:''}<button class='btn alt sm' data-cp='${i}'>Copy</button>${P.map((p,j)=>x.t.toLowerCase().includes(short(p))?`<button class='btn alt sm' data-pf='${j}'>Open ${p.n.split(' (')[0]} profile</button>`:'').filter(Boolean).slice(0,3).join('')}</div>`).join(''):`<div class='msg a'>Hello! I am the GreenLeaf gardening assistant. Ask me how to grow a plant, fix a problem or plan your garden.</div>`;$('aC').scrollTop=$('aC').scrollHeight}
+const newChat=()=>{cur={id:Date.now(),title:'New chat',msgs:[]};ctxP=null;$('aCtx').textContent='';$('aM').textContent='';hl();rc()};
+function offline(q){const l=q.toLowerCase(),p=P.find(x=>l.includes(short(x))||l.includes(x.sci.toLowerCase()));cur.msgs[cur.msgs.length-1].o=true;cur.msgs.push({r:'a',o:true,t:p?`${p.n} (${p.sci})\nSunlight: ${p.sun}\nWater: ${p.w}\nSoil: ${p.soil}\nBest time: ${p.s}\nSteps:\n${p.st.map((s,i)=>(i+1)+'. '+s).join('\n')}\nWatch out: ${p.warn}`:'The AI assistant is not available here, and I could not find that plant in the library. Try the search box in the Plant library, or the Plant doctor for problems.'})}
+async function ask(q){
+ q=q.trim();if(!q||busy)return;busy=true;$('aG').disabled=true;$('aM').textContent='';
+ cur.msgs.push({r:'u',t:q});if(cur.title==='New chat')cur.title=q.slice(0,40);rc();
+ const box=$('aC');box.insertAdjacentHTML('beforeend',"<div class='msg a' id='aT'><span class='dots'><i></i><i></i><i></i></span></div>");box.scrollTop=box.scrollHeight;
+ try{
+  const sample=window.claude?await claude.use('sample'):null;if(!sample)throw {code:'none'};
+  const sys=`You are the GreenLeaf gardening assistant for home gardeners, mainly in the North Indian plains (Bihar, Uttar Pradesh, Punjab). Reply in ${$('aL').value}. Use short, simple, step-by-step answers (numbered steps, plain text, **bold** allowed, no tables or headings). Before answering about any plant, call get_plant to read the GreenLeaf library profile and use it. If the plant is not in the library, say so and give general guidance. Prefer non-chemical solutions and state safety precautions. Never invent exact fertilizer doses or pesticide strengths. Say when you are unsure or when a soil test or local expert is needed. A symptom can have several causes: list the possibilities and ask a follow-up question instead of claiming a diagnosis. Library plants: ${P.map(p=>p.n).join(', ')}.${ctxP?' The user is viewing the profile of '+ctxP.n+'.':''}`;
+  const H=cur.msgs.filter(m=>!m.o).map(m=>({role:m.r==='u'?'user':'assistant',content:m.t}));H[0].content=sys+'\n\nQuestion: '+H[0].content;
+  const res=await sample(H,{cache:false,tools:[{name:'get_plant',description:'Read the GreenLeaf library profile of a plant by common or scientific name.',inputSchema:{type:'object',properties:{name:{type:'string'}},required:['name']},execute:({name})=>{const n=(name||'').toLowerCase(),p=P.find(x=>x.n.toLowerCase().includes(n)||(n&&n.includes(short(x)))||x.sci.toLowerCase()===n);return p?JSON.stringify(prof(p)):'Not in the GreenLeaf library.'}}],onText:({text})=>{const t=$('aT');if(t){t.innerHTML=fmt(text);box.scrollTop=box.scrollHeight}}});
+  cur.msgs.push({r:'a',t:res.text||'I could not produce an answer. Please try again.'});
+ }catch(err){
+  if(err&&(err.code==='none'||err.code==='not_granted'))offline(q);
+  else{cur.msgs.pop();$('aM').textContent='The assistant could not answer ('+(err&&err.code==='rate_limited'?'too many requests, please wait a moment':'something went wrong')+'). Please try again.'}
+ }
+ busy=false;$('aG').disabled=false;csave();hl();rc()}
+const go=()=>{const q=$('aI').value;$('aI').value='';ask(q)};
+$('aG').onclick=go;$('aI').addEventListener('keydown',e=>{if(e.key==='Enter')go()});$('aN').onclick=newChat;
+$('aH').onchange=()=>{const v=$('aH').value;if(v!==''){cur=chats[+v];rc()}};
+$('aS').innerHTML=SUG.map(s=>`<button class='btn alt sm' type='button' data-q='${s}'>${s}</button>`).join('');
+$('aS').onclick=e=>{const b=e.target.closest('[data-q]');if(b)ask(b.dataset.q)};
+$('aC').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.pf)openPlant(+b.dataset.pf);else if(b.dataset.cp){navigator.clipboard.writeText(cur.msgs[+b.dataset.cp].t).then(()=>{$('aM').textContent='Copied.'},()=>{$('aM').textContent='Copy is not available in this browser.'})}};
+function askAbout(i){ctxP=P[i];$('aCtx').textContent='Plant context: '+ctxP.n+' (the assistant will read this plant’s profile)';$('aI').value='How do I grow '+ctxP.n.split(' (')[0]+' step by step?';$('assistant').scrollIntoView();$('aI').focus()}
+/* ---- Soil moisture checker ---- */
+function mo(){const f=+$('mF').value,w=+$('mW').value,d=$('mT').value==='d',s=f+w;let t;
+ if(f===2||s>=3)t=['Do not water','The soil is still wet. Check again in 2–3 days and make sure the pot drains well.'];
+ else if(d)t=s<=1?['Water deeply now','The soil is dry. Water slowly until water drains out, then let it dry fully again.']:['Wait','This plant likes to dry out. Check again in 2–4 days.'];
+ else t=s<=1?['Water now','The soil is dry. Water slowly until water drains from the bottom.']:['Water lightly, or check again tomorrow','The soil is only slightly damp. If the leaves look droopy, give a little water.'];
+ $('mO').innerHTML=`<b>${t[0]}</b><p>${t[1]}</p><p class='muted'>This is a simple guide. Weather, pot size and the plant stage also matter.</p>`}
+['mF','mW','mT'].forEach(i=>$(i).addEventListener('change',mo));mo();
+
+/* ---- Harvest predictor ---- */
+$('hP').innerHTML=Object.keys(HV).map(k=>`<option>${k}</option>`).join('');$('hD').value=iso(today());
+function hv(){const h=HV[$('hP').value],s=$('hD').value;if(!s){$('hO').textContent='Please choose a date.';return}
+ const a=addD(s,h[0]),b=addD(s,h[1]),t=today(),n=diff(a,t);
+ const st=t<a?`Not ready yet. The earliest harvest is in about ${n} day${n===1?'':'s'}.`:t<=b?'You are inside the usual harvest window. Check the signs below.':'The usual window has passed. Check the plant: it may be ready, overripe or just slower than average.';
+ $('hO').innerHTML=`<b>${fd(a)} to ${fd(b)}</b><p>Counted from ${h[2]} (${h[0]}–${h[1]} days). ${st}</p><h4>Signs it is ready</h4><p>${h[3]}</p><h4>How to harvest</h4><p>${h[4]}</p><p class='muted'>These are typical estimates for the plains of North India. Trust the ready signs more than the calendar.</p>`}
+$('hP').addEventListener('change',hv);$('hD').addEventListener('change',hv);hv();
+
+/* ---- Plant Camera (vision AI through the viewer-granted Claude capability) ---- */
+let cvBlob=null,cvThumb='',cvLast='',cam=ld('gl_cam',[]);
+const PT=[{name:'get_plant',description:'Read the GreenLeaf library profile of a plant by common or scientific name.',inputSchema:{type:'object',properties:{name:{type:'string'}},required:['name']},execute:({name})=>{const n=(name||'').toLowerCase(),p=P.find(x=>x.n.toLowerCase().includes(n)||(n&&n.includes(short(x)))||x.sci.toLowerCase()===n);return p?JSON.stringify(prof(p)):'Not in the GreenLeaf library.'}}];
+const CVQ=['What plant is this?','Which growth stage is it in?','Are the leaves healthy?','Why are the leaves yellow?','Does it need water?','Any signs of pests or disease?'];
+$('cvS').innerHTML=CVQ.map(s=>`<button class='btn alt sm' type='button' data-q='${s}'>${s}</button>`).join('');
+$('cvS').onclick=e=>{const b=e.target.closest('[data-q]');if(b)$('cvQ').value=b.dataset.q};
+const prep=(f,max,q)=>new Promise((ok,no)=>{const fr=new FileReader();fr.onerror=no;fr.onload=()=>{const im=new Image();im.onerror=no;im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?ok({blob:b,url:c.toDataURL('image/jpeg',q)}):no(),'image/jpeg',q)};im.src=fr.result};fr.readAsDataURL(f)});
+function cvShow(on){$('cvImg').style.display=on?'block':'none';$('cvEmpty').style.display=on?'none':'block';$('cvRm').hidden=!on}
+async function pick(f){if(!f)return;if(!f.type.startsWith('image/')||f.size>15e6){$('cvM').textContent='Please choose an image file smaller than 15 MB.';return}
+ try{const r=await prep(f,1024,.8);cvBlob=r.blob;$('cvImg').src=r.url;cvThumb=(await prep(f,160,.6)).url;cvLast='';$('cvOut').hidden=true;$('cvAct').innerHTML='';$('cvM').textContent='Photo ready. Choose a question and press Analyze.';cvShow(true)}catch(e){$('cvM').textContent='This image could not be read. Try a JPEG or PNG photo.'}}
+$('cvCam').onchange=e=>{pick(e.target.files[0]);e.target.value=''};$('cvUp').onchange=e=>{pick(e.target.files[0]);e.target.value=''};
+$('cvRm').onclick=()=>{cvBlob=null;cvLast='';$('cvImg').removeAttribute('src');cvShow(false);$('cvOut').hidden=true;$('cvAct').innerHTML='';$('cvM').textContent=''};
+$('cvGo').onclick=async()=>{
+ if(!cvBlob){$('cvM').textContent='Please take or upload a photo first.';return}
+ const q=$('cvQ').value.trim()||'What plant is this and how healthy does it look?';
+ $('cvGo').disabled=true;$('cvM').textContent='Analyzing...';$('cvOut').hidden=false;$('cvOut').innerHTML=`<span class='dots'><i></i><i></i><i></i></span>`;
+ try{
+  const sample=window.claude?await claude.use('sample'):null;if(!sample)throw {code:'none'};
+  const lim=await sample.limits();if(!lim||!lim.images)throw {code:'none'};
+  const prompt=`You are the GreenLeaf plant photo assistant for home gardeners, mainly in the North Indian plains. Look carefully at the attached photo and answer the user's question: ${q}. Reply in ${$('aL').value}. Use these short sections in plain text, and start each point with one label: Photo observation, Library information, or Uncertain suggestion.\n1. What I can see (only what is visible).\n2. Possible plant: up to 3 candidates with a confidence word (likely, possible or unsure) and the scientific name. If a candidate is in the GreenLeaf library, call get_plant and use it.\n3. Estimated growth stage (seedling, vegetative, bud formation, flowering, fruiting, ripening or dormant). Say this is an estimate from one photo.\n4. Possible causes of any problems you can see. Several causes may fit. Never state a disease as certain.\n5. What to check next (soil moisture, drainage, light, the underside of leaves) and safe first steps, non-chemical first.\n6. How sure I am, and which extra photo or detail would help.\nNever invent fertilizer or pesticide doses. If the photo is unclear or not a plant, say so.${cvLast?' Earlier answer for this same photo: '+cvLast:''}`;
+  const res=await sample(prompt,{images:[cvBlob],cache:false,tools:PT,onText:({text})=>{$('cvOut').innerHTML=fmt(text)}});
+  cvLast=res.text;$('cvOut').innerHTML=fmt(res.text);$('cvM').textContent='Image-based analysis. This is an estimate, not a diagnosis.';
+  cam.unshift({id:Date.now(),th:cvThumb,q,t:res.text,d:iso(today())});cam=cam.slice(0,8);sv('gl_cam',cam);cvHist();
+  const j=P.findIndex(p=>res.text.toLowerCase().includes(short(p)));
+  $('cvAct').innerHTML=(j>=0?`<button class='btn sm' data-g='${j}'>Add ${P[j].n.split(' (')[0]} to my garden</button><button class='btn alt sm' data-pf='${j}'>Open plant profile</button>`:'')+`<button class='btn alt sm' data-f='1'>Ask a follow-up</button>`;
+ }catch(err){
+  $('cvOut').hidden=true;
+  $('cvM').textContent=err&&err.code==='rate_limited'?'Too many requests. Please wait a moment and try again.':(err&&(err.code==='none'||err.code==='not_granted'))?'Image analysis is not available here, because the AI permission was not granted or images are not supported. Your photo preview still works, but nothing was analyzed.':'The analysis failed. Please try again.'}
+ $('cvGo').disabled=false};
+$('cvAct').onclick=e=>{const b=e.target.closest('button');if(!b)return;const D=b.dataset;if(D.g){$('gaPl').value=D.g;$('gaW').value=defW(+D.g);$('garden').scrollIntoView()}else if(D.pf)openPlant(+D.pf);else if(D.f){$('cvQ').value='';$('cvQ').focus();$('cvM').textContent='Type your follow-up and press Analyze. The photo and the earlier answer are reused.'}};
+function cvHist(){$('cvH').innerHTML=cam.length?cam.map(c=>`<div class='card'><img src='${c.th}' alt='Saved plant photo' loading='lazy' style='width:100%;height:120px;object-fit:cover;border-radius:12px'><small class='muted'>${c.d}</small><p><b>${esc(c.q)}</b></p><details><summary>View answer</summary><div style='white-space:pre-wrap;margin-top:6px'>${fmt(c.t)}</div></details><button class='btn alt sm' data-d='${c.id}' style='margin-top:8px'>Delete</button></div>`).join(''):`<p class='muted'>No analyzed photos yet. Your photo history will appear here.</p>`}
+$('cvH').onclick=e=>{const b=e.target.closest('[data-d]');if(b){cam=cam.filter(c=>c.id!==+b.dataset.d);sv('gl_cam',cam);cvHist()}};
+cvHist();
+newChat();
+</script>
+<script>if('serviceWorker' in navigator&&location.protocol!=='file:')addEventListener('load',function(){navigator.serviceWorker.register('/sw.js')})</script>
+</body>
+</html>
