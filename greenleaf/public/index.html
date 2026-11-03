@@ -498,7 +498,7 @@ $('aG').onclick=go;$('aI').addEventListener('keydown',e=>{if(e.key==='Enter')go(
 $('aH').onchange=()=>{const v=$('aH').value;if(v!==''){cur=chats[+v];rc()}};
 $('aS').innerHTML=SUG.map(s=>`<button class='btn alt sm' type='button' data-q='${s}'>${s}</button>`).join('');
 $('aS').onclick=e=>{const b=e.target.closest('[data-q]');if(b)ask(b.dataset.q)};
-$('aC').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.pf)openPlant(+b.dataset.pf);else if(b.dataset.cp){navigator.clipboard.writeText(cur.msgs[+b.dataset.cp].t).then(()=>{$('aM').textContent='Copied.'},()=>{$('aM').textContent='Copy is not available in this browser.'})}};
+$('aC').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.pf)openPlant(+b.dataset.pf);else if(b.dataset.cp){const orig=b.textContent;const fb=msg=>{b.textContent=msg;setTimeout(()=>{b.textContent=orig},2000)};if(!navigator?.clipboard?.writeText){$('aM').textContent='Copy is not available in this browser.';fb('Could not copy');return}navigator.clipboard.writeText(cur.msgs[+b.dataset.cp].t).then(()=>{$('aM').textContent='Copied.';fb('Copied!')},()=>{$('aM').textContent='Copy is not available in this browser.';fb('Could not copy')})}};
 function askAbout(i){ctxP=P[i];$('aCtx').textContent='Plant context: '+ctxP.n+' (the assistant will read this plant’s profile)';$('aI').value='How do I grow '+ctxP.n.split(' (')[0]+' step by step?';$('assistant').scrollIntoView();$('aI').focus()}
 /* ---- Soil moisture checker ---- */
 function mo(){const f=+$('mF').value,w=+$('mW').value,d=$('mT').value==='d',s=f+w;let t;
