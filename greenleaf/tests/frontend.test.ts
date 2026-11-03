@@ -66,3 +66,30 @@ test('assistant falls back to offline help when no AI is available', async () =>
   await wait();
   assert.match(el('aC').textContent ?? '', /Offline help/);
 });
+
+test('copy button in assistant response provides feedback', async () => {
+  const { dom, el } = load();
+  let writtenText = '';
+  Object.assign(dom.window.navigator, {
+    clipboard: {
+      writeText: async (t: string) => {
+        writtenText = t;
+      },
+    },
+  });
+
+  el<HTMLInputElement>('aI').value = 'How do I grow tomato?';
+  el<HTMLButtonElement>('aG').click();
+  await wait();
+
+  const copyBtn = dom.window.document.querySelector<HTMLButtonElement>('button[data-cp="1"]');
+  assert.ok(copyBtn);
+  assert.equal(copyBtn.textContent, 'Copy');
+
+  copyBtn.click();
+  await wait(10);
+
+  assert.equal(copyBtn.textContent, 'Copied!');
+  assert.equal(el('aM').textContent, 'Copied.');
+  assert.match(writtenText, /Tomato/);
+});
