@@ -94,10 +94,14 @@ h2{display:flex;align-items:center;gap:10px}h2 .ic{width:28px;height:28px;color:
 .tl{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tl span{border:1px solid var(--line);border-radius:99px;padding:2px 10px;font-size:.82rem;font-weight:600;color:var(--muted)}.tl .on{background:var(--green);color:var(--on);border-color:var(--green)}
 [hidden]{display:none!important}
 .flag{display:inline-block;background:rgba(242,169,0,.25);border-radius:8px;padding:2px 10px;font-size:.82rem;font-weight:700}
+.skip-link{position:fixed;top:-120px;left:260px;z-index:99;box-shadow:0 8px 20px rgba(0,0,0,.15);transition:top .2s}
+.skip-link:focus{top:16px}
+@media(max-width:900px){.skip-link{left:16px}}
 footer{margin-top:80px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem}
 </style>
 </head>
 <body>
+<a class="skip-link btn" href="#main">Skip to main content</a>
 <div class="wrap">
 <header class="top">
 <a class="brand" href="#top"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="max-height:none"><circle cx="14" cy="14" r="14" fill="var(--green)"/><path d="M14 22V12M14 14C14 9 18 7 22 7C22 12 19 14 14 14ZM14 17C14 13 11 11 7 11C7 15 9 17 14 17Z" stroke="var(--on)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>GreenLeaf</a>
@@ -105,6 +109,7 @@ footer{margin-top:80px;padding-top:20px;border-top:1px solid var(--line);color:v
 <nav aria-label='Main'><a href='#top'><svg class='ic'><use href='#i-home'/></svg>Home</a><a href='#garden'><svg class='ic'><use href='#i-garden'/></svg>My garden</a><a href='#library'><svg class='ic'><use href='#i-lib'/></svg>Plant library</a><a href='#calendar'><svg class='ic'><use href='#i-cal'/></svg>Calendar</a><a href='#doctor'><svg class='ic'><use href='#i-doc'/></svg>Plant doctor</a><a href='#plantlab'><svg class='ic'><use href='#i-lab'/></svg>Plant Lab</a><a href='#assistant'><svg class='ic'><use href='#i-ai'/></svg>AI assistant</a><a href='#camera'><svg class='ic'><use href='#i-cam'/></svg>Plant Camera</a><a href='#harvest'><svg class='ic'><use href='#i-bask'/></svg>Harvest predictor</a><a href='#planner'><svg class='ic'><use href='#i-water'/></svg>Water planner</a></nav>
 </header>
 
+<main id="main" tabindex="-1">
 <section class="hero" id="top">
 <div>
 <p class="eyebrow">Practical plant guide for India</p>
@@ -268,6 +273,7 @@ footer{margin-top:80px;padding-top:20px;border-top:1px solid var(--line);color:v
 <a class='btn fab' href='#assistant'><svg class='ic'><use href='#i-ai'/></svg>Ask AI</a>
 
 <footer>GreenLeaf is a beginner guide. Amounts and dates are a starting point. Every garden is different, so check your soil with your finger and watch your plant.</footer>
+</main>
 </div>
 
 <script>

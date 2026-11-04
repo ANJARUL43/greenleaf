@@ -66,3 +66,21 @@ test('assistant falls back to offline help when no AI is available', async () =>
   await wait();
   assert.match(el('aC').textContent ?? '', /Offline help/);
 });
+
+test('skip link allows keyboard users to bypass navigation', () => {
+  const { d } = load();
+  const skipLink = d.querySelector<HTMLAnchorElement>('a.skip-link');
+  assert.ok(skipLink, 'Skip link should exist');
+  assert.equal(skipLink?.getAttribute('href'), '#main');
+  const target = d.getElementById('main');
+  assert.ok(target, 'Target #main element should exist');
+  assert.equal(target?.tagName.toLowerCase(), 'main');
+  assert.equal(target?.getAttribute('tabindex'), '-1');
+  // Confirm target comes after header so nav is bypassed
+  const header = d.querySelector('header.top');
+  assert.ok(header, 'Header should exist');
+  assert.ok(
+    header.compareDocumentPosition(target) & 4, // DOCUMENT_POSITION_FOLLOWING
+    'Main content must follow the header/navigation',
+  );
+});
