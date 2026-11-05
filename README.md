@@ -1,6 +1,6 @@
 # GreenLeaf
 
-A plant care web app: plant library, My garden tracker, harvest predictor, water planner, Plant Lab (simulator and experiment journal), Plant doctor, AI assistant and Plant Camera.
+A plant care web app: plant library, My garden tracker, a today's watering checklist, harvest predictor, water planner, Plant Lab (simulator and experiment journal), Plant doctor, AI assistant and Plant Camera.
 
 This repository contains an Express + TypeScript server, a SQLite database with migrations, and the existing single-file frontend in `public/index.html`.
 
@@ -9,7 +9,7 @@ This repository contains an Express + TypeScript server, a SQLite database with 
 | Area | Status |
 | --- | --- |
 | Lint, typecheck, production build | Run and passing (Linux, Node 22) |
-| 11 automated tests (API, migrations, AI proxy with a mock upstream, frontend smoke tests in jsdom) | Passing |
+| 12 automated tests (API, migrations, AI proxy with a mock upstream, frontend smoke tests in jsdom) | Passing |
 | Server start from the production build, static files, health endpoint | Smoke-tested |
 | Windows | **Not tested.** Written to be cross-platform (no shell-specific scripts) |
 | Real Anthropic API calls | **Not tested.** Only a mock upstream was used. Add your own key and try it |
@@ -86,6 +86,6 @@ A `Dockerfile` is included (not built here). Platforms with persistent disks (Re
 ## Known limitations
 
 - Frontend is one JavaScript file inside `index.html`, so TypeScript and ESLint cover the server and tests only. Its CSP needs `'unsafe-inline'`.
-- Plant data is limited to 21 plants and has no source or verification fields yet.
+- Plant data is limited to 31 plants and has no source or verification fields yet.
 - No accounts. Clearing cookies loses access to server-side data.
 - Photos are compressed in the browser, stored in the database and sent to the AI provider only when the user presses Analyze.

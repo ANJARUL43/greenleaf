@@ -30,7 +30,7 @@ test('page loads without script errors and renders its data', () => {
   const { d, errors } = load();
   assert.deepEqual(errors, []);
   assert.ok(d.querySelectorAll('#list .pc').length > 0);
-  assert.ok(d.querySelectorAll('#gaPl option').length >= 21);
+  assert.ok(d.querySelectorAll('#gaPl option').length >= 31);
   assert.equal(d.querySelectorAll('#sTl span').length, 6);
 });
 
@@ -47,6 +47,20 @@ test('adding a plant to My garden renders a card and persists', () => {
   el<HTMLButtonElement>('gaAdd').click();
   assert.equal(d.querySelectorAll('#gaList .card').length, 1);
   assert.match(dom.window.localStorage.getItem('gl_garden') ?? '', /"pid"/);
+});
+
+test('watering reminders show due plants and can mark them watered', () => {
+  const { d, el } = load();
+  const past = new Date(Date.now() - 5 * 864e5).toISOString().slice(0, 10);
+  el<HTMLInputElement>('gaDate').value = past;
+  el<HTMLInputElement>('gaW').value = '2';
+  el<HTMLButtonElement>('gaAdd').click();
+  const box = d.querySelector('#remList [data-rw]') as HTMLInputElement | null;
+  assert.ok(box, 'a due plant should appear in the reminder checklist');
+  box.checked = true;
+  box.dispatchEvent(new d.defaultView!.Event('change', { bubbles: true }));
+  assert.match(el('remSum').textContent ?? '', /caught up/i);
+  assert.equal(d.querySelectorAll('#remList [data-rw]').length, 0);
 });
 
 test('harvest predictor, moisture checker and planner produce results', () => {
