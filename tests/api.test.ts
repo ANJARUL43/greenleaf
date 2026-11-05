@@ -6,6 +6,7 @@ import { openDb } from '../src/db.js';
 import { migrate } from '../src/migrate.js';
 import { createApp } from '../src/server.js';
 import { loadConfig } from '../src/config.js';
+import { importPlants, parseCsv } from '../src/import-plants.js';
 
 async function start(env: NodeJS.ProcessEnv = {}) {
   const db = openDb(':memory:');
@@ -15,6 +16,7 @@ async function start(env: NodeJS.ProcessEnv = {}) {
   const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
   return {
     url,
+    db,
     close: () =>
       new Promise<void>((r) => {
         server.close(() => r());
@@ -27,8 +29,98 @@ const json = { 'content-type': 'application/json' };
 
 test('migrations apply once and are idempotent', () => {
   const db = openDb(':memory:');
-  assert.deepEqual(migrate(db), ['001_init.sql']);
+  assert.deepEqual(migrate(db), ['001_init.sql', '002_plants.sql']);
   assert.deepEqual(migrate(db), []);
+});
+
+test('plant CSV parser handles BOM, quoted commas, doubled quotes and CRLF', () => {
+  const rows = parseCsv(
+    '\uFEFF"Symbol","Synonym Symbol","Scientific Name with Author","Common Name","Family"\r\n' +
+      '"ABAL3","","Abies alba Mill.","silver, ""true"" fir","Pinaceae"\r\n' +
+      '"ABAM","ABAM2","Abies amabilis Douglas ex Forbes","","Pinaceae"\r\n',
+  );
+  assert.deepEqual(rows[0], [
+    'Symbol',
+    'Synonym Symbol',
+    'Scientific Name with Author',
+    'Common Name',
+    'Family',
+  ]);
+  assert.deepEqual(rows[1], ['ABAL3', '', 'Abies alba Mill.', 'silver, "true" fir', 'Pinaceae']);
+  assert.deepEqual(rows[2], ['ABAM', 'ABAM2', 'Abies amabilis Douglas ex Forbes', '', 'Pinaceae']);
+});
+
+test('plant CSV import replaces the catalogue and records accepted status', () => {
+  const db = openDb(':memory:');
+  migrate(db);
+  const rows = parseCsv(
+    'Symbol,Synonym Symbol,Scientific Name with Author,Common Name,Family\n' +
+      'ROSA,,Rosa rubiginosa L.,sweetbriar rose,Rosaceae\n' +
+      'ROSY,ROSA,Rosa canina L.,,Rosaceae\n' +
+      'BROKEN,,,,\n',
+  );
+  const result = importPlants(db, rows);
+  assert.deepEqual(result, { parsed: 3, inserted: 2, skipped: 1, accepted: 1, synonyms: 1 });
+  const count = (db.prepare('SELECT COUNT(*) AS n FROM plants').get() as { n: number }).n;
+  assert.equal(count, 2);
+  importPlants(db, rows);
+  assert.equal((db.prepare('SELECT COUNT(*) AS n FROM plants').get() as { n: number }).n, 2);
+});
+
+test('plant search validates input, escapes wildcards and returns names', async () => {
+  const s = await start();
+  try {
+    const insert = s.db.prepare(
+      `INSERT INTO plants (symbol, synonym_symbol, scientific_name, common_name, family, accepted)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+    );
+    insert.run('ROSA', '', 'Rosa rubiginosa L.', 'sweetbriar rose', 'Rosaceae', 1);
+    insert.run('MANG', '', 'Mangifera indica L.', 'mango', 'Anacardiaceae', 1);
+    insert.run('ROSY', 'ROSA', 'Rosa canina L.', '', 'Rosaceae', 0);
+
+    const res = await fetch(`${s.url}/api/plants?q=rose`);
+    assert.equal(res.status, 200);
+    const body = (await res.json()) as {
+      total: number;
+      limit: number;
+      offset: number;
+      items: {
+        symbol: string;
+        synonymSymbol: string;
+        scientificName: string;
+        commonName: string;
+        family: string;
+        accepted: boolean;
+      }[];
+    };
+    assert.equal(body.total, 1);
+    assert.equal(body.limit, 20);
+    assert.equal(body.offset, 0);
+    assert.deepEqual(body.items[0], {
+      symbol: 'ROSA',
+      synonymSymbol: '',
+      scientificName: 'Rosa rubiginosa L.',
+      commonName: 'sweetbriar rose',
+      family: 'Rosaceae',
+      accepted: true,
+    });
+
+    const synonym = (await (await fetch(`${s.url}/api/plants?q=canina`)).json()) as {
+      items: { accepted: boolean }[];
+    };
+    assert.equal(synonym.items[0]?.accepted, false);
+
+    const family = (await (await fetch(`${s.url}/api/plants?q=Rosaceae`)).json()) as { total: number };
+    assert.equal(family.total, 2);
+
+    assert.equal((await fetch(`${s.url}/api/plants?q=a`)).status, 400);
+    assert.equal((await fetch(`${s.url}/api/plants`)).status, 400);
+    assert.equal((await fetch(`${s.url}/api/plants?q=rose&limit=51`)).status, 400);
+    const wildcard = (await (await fetch(`${s.url}/api/plants?q=%25%25`)).json()) as { total: number };
+    assert.equal(wildcard.total, 0);
+  } finally {
+    await s.close();
+  }
 });
 
 test('health endpoint reports AI status', async () => {

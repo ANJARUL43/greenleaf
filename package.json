@@ -13,6 +13,8 @@
     "start": "node dist/index.js",
     "migrate": "tsx src/migrate.ts",
     "migrate:prod": "node dist/migrate.js",
+    "import:plants": "tsx src/import-plants.ts",
+    "import:plants:prod": "node dist/import-plants.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/api.test.ts tests/frontend.test.ts"

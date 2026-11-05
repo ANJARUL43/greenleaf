@@ -10,6 +10,14 @@ import { ROOT } from './paths.js';
 
 export const DATA_KEYS = ['gl_garden', 'gl_fav', 'gl_exp', 'gl_chats', 'gl_cam'];
 
+export const plantQuery = z.object({
+  q: z.string().trim().min(2).max(80),
+  limit: z.coerce.number().int().min(1).max(50).default(20),
+  offset: z.coerce.number().int().min(0).max(100_000).default(0),
+});
+
+const escapeLike = (value: string) => value.replace(/[\\%_]/g, (c) => `\\${c}`);
+
 const block = z.object({ type: z.enum(['text', 'image', 'tool_use', 'tool_result']) }).passthrough();
 const aiBody = z.object({
   system: z.string().max(8000).optional(),
@@ -74,6 +82,63 @@ export function createApp(db: Database.Database, cfg: Config): express.Express {
   app.get('/api/health', (_req, res) => {
     db.prepare('SELECT 1').get();
     res.json({ ok: true, ai: Boolean(cfg.anthropicKey) });
+  });
+
+  app.get('/api/plants', (req, res) => {
+    const parsed = plantQuery.safeParse(req.query);
+    if (!parsed.success) {
+      res.status(400).json({ error: 'invalid_query' });
+      return;
+    }
+    const { q, limit, offset } = parsed.data;
+    const escaped = escapeLike(q);
+    const params = {
+      q,
+      contains: `%${escaped}%`,
+      starts: `${escaped}%`,
+      spaced: `% ${escaped}%`,
+      limit,
+      offset,
+    };
+    const where = `(scientific_name LIKE @contains ESCAPE '\\'
+      OR common_name LIKE @contains ESCAPE '\\'
+      OR family LIKE @contains ESCAPE '\\')`;
+    const total = (
+      db.prepare(`SELECT COUNT(*) AS n FROM plants WHERE ${where}`).get(params) as { n: number }
+    ).n;
+    const rows = db
+      .prepare(
+        `SELECT symbol, synonym_symbol AS synonymSymbol, scientific_name AS scientificName,
+                common_name AS commonName, family, accepted
+         FROM plants
+         WHERE ${where}
+         ORDER BY
+           CASE
+             WHEN lower(common_name) = lower(@q) THEN 0
+             WHEN lower(common_name) LIKE @starts ESCAPE '\\' THEN 1
+             WHEN lower(scientific_name) LIKE @starts ESCAPE '\\' THEN 2
+             WHEN lower(common_name) LIKE @spaced ESCAPE '\\' THEN 3
+             ELSE 4
+           END,
+           CASE WHEN common_name = '' THEN 1 ELSE 0 END,
+           common_name COLLATE NOCASE,
+           scientific_name COLLATE NOCASE
+         LIMIT @limit OFFSET @offset`,
+      )
+      .all(params) as {
+      symbol: string;
+      synonymSymbol: string;
+      scientificName: string;
+      commonName: string;
+      family: string;
+      accepted: number;
+    }[];
+    res.json({
+      total,
+      limit,
+      offset,
+      items: rows.map((row) => ({ ...row, accepted: row.accepted === 1 })),
+    });
   });
 
   const api = express.Router();

@@ -42,6 +42,47 @@ test('library search filters plants', () => {
   assert.equal(d.querySelectorAll('#list .pc').length, 1);
 });
 
+test('plant name search explains when the server search is unavailable', async () => {
+  const { dom, el } = load();
+  (dom.window as unknown as { fetch?: unknown }).fetch = undefined;
+  const q = el<HTMLInputElement>('pnQ');
+  q.value = 'rose';
+  q.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+  await wait(400);
+  assert.match(el('pnSum').textContent ?? '', /not available right now/i);
+  assert.equal((el<HTMLButtonElement>('pnMore')).hidden, true);
+});
+
+test('plant name search renders names returned by the API', async () => {
+  const { dom, d, el } = load();
+  (dom.window as unknown as { fetch: () => Promise<unknown> }).fetch = async () => ({
+    ok: true,
+    json: async () => ({
+      total: 1,
+      limit: 20,
+      offset: 0,
+      items: [
+        {
+          symbol: 'ROSA',
+          synonymSymbol: '',
+          scientificName: 'Rosa rubiginosa L.',
+          commonName: 'sweetbriar rose',
+          family: 'Rosaceae',
+          accepted: true,
+        },
+      ],
+    }),
+  });
+  const q = el<HTMLInputElement>('pnQ');
+  q.value = 'rose';
+  q.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+  await wait(400);
+  assert.equal(d.querySelectorAll('#pnList .pnrow').length, 1);
+  assert.match(el('pnList').textContent ?? '', /sweetbriar rose/);
+  assert.match(el('pnList').textContent ?? '', /Rosa rubiginosa L\./);
+  assert.match(el('pnSum').textContent ?? '', /1 match/);
+});
+
 test('adding a plant to My garden renders a card and persists', () => {
   const { dom, d, el } = load();
   el<HTMLButtonElement>('gaAdd').click();

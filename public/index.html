@@ -131,6 +131,15 @@ footer{opacity:.92}
 .remnext{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .remchip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:4px 12px;font-size:.85rem;font-weight:600;color:var(--muted)}
 .remchip b{color:var(--ink)}
+/* Plant-name catalogue */
+.pnrow{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);margin-top:10px}
+.pnrow .pnmain{min-width:0}
+.pnrow .pnmain b{display:block;line-height:1.35}
+.pnrow small{display:block;color:var(--muted);font-size:.88rem;line-height:1.4;margin-top:2px}
+.pnrow .tag{flex:none;margin-top:2px}
+.tag.acc{background:rgba(79,168,79,.18)}
+.tag.syn{background:rgba(242,169,0,.24)}
+.pnmore{display:flex;justify-content:center;margin-top:14px}
 </style>
 </head>
 <body>
@@ -138,7 +147,7 @@ footer{opacity:.92}
 <header class="top">
 <a class="brand" href="#top"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="max-height:none"><circle cx="14" cy="14" r="14" fill="var(--green)"/><path d="M14 22V12M14 14C14 9 18 7 22 7C22 12 19 14 14 14ZM14 17C14 13 11 11 7 11C7 15 9 17 14 17Z" stroke="var(--on)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>GreenLeaf</a>
 <svg style='position:absolute;width:0;height:0' aria-hidden='true'><symbol id='i-home' viewBox='0 0 24 24'><path d='M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z'/></symbol><symbol id='i-garden' viewBox='0 0 24 24'><path d='M4 21h16M7 21v-4h10v4M12 17V9M12 12c0-3 2-4 5-4 0 3-2 4-5 4zM12 14c0-2-2-3-5-3 0 2 2 3 5 3z'/></symbol><symbol id='i-lib' viewBox='0 0 24 24'><path d='M4 5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2zM4 20a2 2 0 0 0 2 2h13v-4M12 14c-2 0-3-1.5-3-4 2 0 3 1 3 4zM12 14c0-3 1-4 3-4 0 2-1 4-3 4z'/></symbol><symbol id='i-cal' viewBox='0 0 24 24'><rect x='3' y='5' width='18' height='16' rx='2'/><path d='M3 10h18M8 3v4M16 3v4'/></symbol><symbol id='i-doc' viewBox='0 0 24 24'><path d='M20 4C10 4 5 9 5 15c0 2 .5 3 1 4 6 0 14-3 14-15z'/><path d='M12 9v6M9 12h6'/></symbol><symbol id='i-lab' viewBox='0 0 24 24'><path d='M9 3h6M10 3v6l-5.5 10a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3'/><path d='M12 19c-2 0-3-1.2-3-3 2 0 3 .8 3 3zM12 19c0-2 1-3 3-3 0 2-1 3-3 3z'/></symbol><symbol id='i-ai' viewBox='0 0 24 24'><path d='M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z'/><path d='M12 14c-2.5 0-4-1.5-4-4 2.5 0 4 1.5 4 4zM12 14c0-2.5 1.5-4 4-4 0 2.5-1.5 4-4 4z'/></symbol><symbol id='i-cam' viewBox='0 0 24 24'><path d='M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z'/><path d='M12 17c-2.5 0-4-1.5-4-4 2.5 0 4 1.5 4 4zM12 17c0-2.5 1.5-4 4-4 0 2.5-1.5 4-4 4z'/></symbol><symbol id='i-bask' viewBox='0 0 24 24'><path d='M3 10h18l-2 10H5zM8 10l3-6M16 10l-3-6'/></symbol><symbol id='i-water' viewBox='0 0 24 24'><path d='M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'/></symbol></svg>
-<nav aria-label='Main'><a href='#top'><svg class='ic'><use href='#i-home'/></svg>Home</a><a href='#reminders'><svg class='ic'><use href='#i-cal'/></svg>Today</a><a href='#garden'><svg class='ic'><use href='#i-garden'/></svg>My garden</a><a href='#library'><svg class='ic'><use href='#i-lib'/></svg>Plant library</a><a href='#calendar'><svg class='ic'><use href='#i-cal'/></svg>Calendar</a><a href='#doctor'><svg class='ic'><use href='#i-doc'/></svg>Plant doctor</a><a href='#plantlab'><svg class='ic'><use href='#i-lab'/></svg>Plant Lab</a><a href='#assistant'><svg class='ic'><use href='#i-ai'/></svg>AI assistant</a><a href='#camera'><svg class='ic'><use href='#i-cam'/></svg>Plant Camera</a><a href='#harvest'><svg class='ic'><use href='#i-bask'/></svg>Harvest predictor</a><a href='#planner'><svg class='ic'><use href='#i-water'/></svg>Water planner</a></nav>
+<nav aria-label='Main'><a href='#top'><svg class='ic'><use href='#i-home'/></svg>Home</a><a href='#reminders'><svg class='ic'><use href='#i-cal'/></svg>Today</a><a href='#garden'><svg class='ic'><use href='#i-garden'/></svg>My garden</a><a href='#library'><svg class='ic'><use href='#i-lib'/></svg>Plant library</a><a href='#plantnames'><svg class='ic'><use href='#i-lib'/></svg>Plant names</a><a href='#calendar'><svg class='ic'><use href='#i-cal'/></svg>Calendar</a><a href='#doctor'><svg class='ic'><use href='#i-doc'/></svg>Plant doctor</a><a href='#plantlab'><svg class='ic'><use href='#i-lab'/></svg>Plant Lab</a><a href='#assistant'><svg class='ic'><use href='#i-ai'/></svg>AI assistant</a><a href='#camera'><svg class='ic'><use href='#i-cam'/></svg>Plant Camera</a><a href='#harvest'><svg class='ic'><use href='#i-bask'/></svg>Harvest predictor</a><a href='#planner'><svg class='ic'><use href='#i-water'/></svg>Water planner</a></nav>
 </header>
 
 <section class="hero" id="top">
@@ -176,6 +185,17 @@ footer{opacity:.92}
 <div style="max-width:380px;margin-bottom:12px"><label for="q">Search plants</label><input id="q" type="search" placeholder="Name, category or scientific name"></div>
 <div class="tabs" id="tabs" role="tablist"></div>
 <div class="lib"><div class="list" id="list"></div><div class="card" id="det"></div></div>
+</section>
+
+<section class="sec" id="plantnames">
+<h2><svg class='ic'><use href='#i-lib'/></svg>Plant names A–Z</h2>
+<p class="muted">Search a large catalogue of plant names from the USDA PLANTS database. It lists scientific names, common names and families. The detailed care guides are in the Plant library above.</p>
+<div class="card">
+<div style="max-width:440px"><label for="pnQ">Search plant names</label><input id="pnQ" type="search" maxlength="80" placeholder="Type at least 2 letters, for example rose or mango" autocomplete="off"></div>
+<div class="out" id="pnSum" role="status" aria-live="polite">Type at least 2 letters to search the plant-name catalogue.</div>
+<div id="pnList"></div>
+<div class="pnmore"><button class="btn alt sm" id="pnMore" type="button" hidden>Show more</button></div>
+</div>
 </section>
 
 <section class="sec" id="garden">
@@ -541,6 +561,55 @@ $('xList').onclick=async e=>{const b=e.target.closest('button');if(!b)return;con
  else if(D.o){const t=$('ot'+id).value.trim(),f=$('oi'+id).files[0];if(!t&&!f)return;const img=f?await shrink(f):'';x.obs.push({d:iso(today()),t,img})}
  svx();exr()};
 exr();
+
+/* ---- Plant names A–Z (search API backed by the imported USDA catalogue) ---- */
+const PN_LIMIT=20;
+let pnTimer=0,pnSeq=0,pnVisible=0,pnTotal=0;
+const pnStatus=html=>{$('pnSum').innerHTML=html};
+function pnCard(p){
+ const common=(p.commonName||'').trim(),sci=p.scientificName||'',family=p.family||'';
+ const main=common
+  ?`<b>${esc(common)}</b><small><i>${esc(sci)}</i>${family?' · '+esc(family):''}</small>`
+  :`<b><i>${esc(sci)}</i></b><small>${family?esc(family):'Family not listed'}</small>`;
+ return `<div class="pnrow"><div class="pnmain">${main}</div><span class="tag ${p.accepted?'acc':'syn'}">${p.accepted?'Accepted':'Synonym'}</span></div>`;
+}
+function pnSearch(more){
+ const q=$('pnQ').value.trim();
+ if(q.length<2){
+  pnSeq++;pnVisible=0;pnTotal=0;$('pnList').innerHTML='';$('pnMore').hidden=true;
+  pnStatus('Type at least 2 letters to search the plant-name catalogue.');
+  return;
+ }
+ if(!window.fetch){
+  pnSeq++;$('pnMore').hidden=true;
+  pnStatus('<b>Search is not available right now.</b><p class="muted">The plant-name catalogue needs the GreenLeaf server. Start it with <code>npm.cmd run dev</code> and reload this page.</p>');
+  return;
+ }
+ const offset=more?pnVisible:0,seq=++pnSeq;
+ if(!more){$('pnList').innerHTML='';pnVisible=0;pnTotal=0}
+ pnStatus('<b>Searching…</b>');
+ $('pnMore').hidden=true;$('pnMore').disabled=true;
+ window.fetch(`/api/plants?q=${encodeURIComponent(q)}&limit=${PN_LIMIT}&offset=${offset}`)
+  .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+  .then(data=>{
+   if(seq!==pnSeq)return;
+   const items=Array.isArray(data.items)?data.items:[];
+   pnTotal=Number(data.total)||0;pnVisible=offset+items.length;
+   if(more)$('pnList').insertAdjacentHTML('beforeend',items.map(pnCard).join(''));
+   else $('pnList').innerHTML=items.map(pnCard).join('');
+   if(pnTotal)pnStatus(`<b>${pnTotal.toLocaleString()} ${pnTotal===1?'match':'matches'}</b><p class="muted">Showing ${Math.min(pnVisible,pnTotal).toLocaleString()} of ${pnTotal.toLocaleString()} names. These are catalogue names; open the Plant library above for full care guides.</p>`);
+   else pnStatus(`<b>No names found for “${esc(q)}”.</b><p class="muted">Check the spelling, or try a shorter word. If every search is empty, the server may still need the plant-name import (see the README).</p>`);
+   $('pnMore').hidden=!items.length||pnVisible>=pnTotal;
+   $('pnMore').disabled=false;
+  })
+  .catch(()=>{
+   if(seq!==pnSeq)return;
+   $('pnMore').hidden=true;$('pnMore').disabled=false;
+   pnStatus('<b>Search is not available right now.</b><p class="muted">The plant-name catalogue needs the GreenLeaf server. Start it with <code>npm.cmd run dev</code> and reload this page.</p>');
+  });
+}
+$('pnQ').addEventListener('input',()=>{clearTimeout(pnTimer);pnTimer=setTimeout(()=>pnSearch(false),300)});
+$('pnMore').onclick=()=>pnSearch(true);
 
 /* ---- AI Gardening Assistant (uses the viewer-granted Claude capability) ---- */
 let chats=ld('gl_chats',[]),cur=null,ctxP=null,busy=false;
