@@ -46,7 +46,7 @@ On Windows PowerShell, use `npm.cmd` if `npm.ps1` is blocked by the execution po
 
 The import replaces the `plants` table in one transaction, so it is safe to run again after downloading a newer list. It loads scientific names, common names, families, and whether each row is an accepted name or a synonym. The **Plant names A–Z** section searches it through `GET /api/plants`; the 31 detailed care guides stay in the Plant library.
 
-Choosing a search result opens a basic profile with plant group, family, USDA symbol, light, water and soil guidance. **These care fields are estimates** generated from the plant group and the name record, not verified per-species advice. The profile is labelled as an estimate and links to the USDA record. When a name exactly matches a library plant (common name, or scientific name and its synonyms), it also offers the hand-written care guide.
+Choosing a search result opens a basic profile with plant group, family, USDA symbol, sunlight, water, soil, best time, duration and spacing guidance. **These fields are estimates** generated from the plant group and the name record, not verified per-species advice. The profile is labelled as an estimate and links to the USDA record. When a name exactly matches a library plant (common name, or scientific name and its synonyms), it also offers the hand-written care guide.
 
 ## Scripts
 

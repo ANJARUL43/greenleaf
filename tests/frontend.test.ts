@@ -83,9 +83,12 @@ test('plant name search renders names returned by the API', async () => {
   assert.match(el('pnSum').textContent ?? '', /1 match/);
   const detail = el('pnDet').textContent ?? '';
   assert.match(detail, /Plant group/);
-  assert.match(detail, /Light \(estimate\)/);
+  assert.match(detail, /Sunlight \(estimate\)/);
   assert.match(detail, /Water \(estimate\)/);
   assert.match(detail, /Soil \(estimate\)/);
+  assert.match(detail, /Best time/);
+  assert.match(detail, /How long/);
+  assert.match(detail, /Space/);
   assert.match(detail, /Estimate, not a verified guide/);
   assert.match(detail, /Rosaceae/);
   assert.match(detail, /ROSA/);
