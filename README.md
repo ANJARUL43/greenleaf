@@ -9,7 +9,7 @@ This repository contains an Express + TypeScript server, a SQLite database with 
 | Area | Status |
 | --- | --- |
 | Lint, typecheck, production build | Run and passing (Windows, Node 22; CI covers Linux on Node 20 and 22) |
-| 17 automated tests (API, migrations, plant CSV import, AI proxy with a mock upstream, frontend smoke tests in jsdom) | Passing |
+| 18 automated tests (API, migrations, plant CSV import, AI proxy with a mock upstream, frontend smoke tests in jsdom) | Passing |
 | Server start from the production build, static files, health endpoint | Smoke-tested |
 | Windows | Tested locally (Node 22). If PowerShell blocks `npm.ps1`, use `npm.cmd` |
 | Real Anthropic API calls | **Not tested.** Only a mock upstream was used. Add your own key and try it |
@@ -44,7 +44,9 @@ npm run import:plants -- "path/to/plantlst.txt"
 
 On Windows PowerShell, use `npm.cmd` if `npm.ps1` is blocked by the execution policy, for example `npm.cmd run import:plants -- "E:\32\plantlst.txt"`.
 
-The import replaces the `plants` table in one transaction, so it is safe to run again after downloading a newer list. It loads scientific names, common names, families, and whether each row is an accepted name or a synonym. The **Plant names A–Z** section searches it through `GET /api/plants`; the care guides stay in the Plant library.
+The import replaces the `plants` table in one transaction, so it is safe to run again after downloading a newer list. It loads scientific names, common names, families, and whether each row is an accepted name or a synonym. The **Plant names A–Z** section searches it through `GET /api/plants`; the 31 detailed care guides stay in the Plant library.
+
+Choosing a search result opens a basic profile with plant group, family, USDA symbol, light, water and soil guidance. **These care fields are estimates** generated from the plant group and the name record, not verified per-species advice. The profile is labelled as an estimate and links to the USDA record. When a name exactly matches a library plant (common name, or scientific name and its synonyms), it also offers the hand-written care guide.
 
 ## Scripts
 
@@ -102,7 +104,7 @@ A `Dockerfile` is included (not built here). Platforms with persistent disks (Re
 ## Known limitations
 
 - Frontend is one JavaScript file inside `index.html`, so TypeScript and ESLint cover the server and tests only. Its CSP needs `'unsafe-inline'`.
-- Plant data has 31 hand-written care guides. The 93,157-name catalogue imported from USDA PLANTS is a name index with no care details or verification fields.
+- Plant data has 31 hand-written care guides. The 93,157-name catalogue imported from USDA PLANTS is a name index with no verified care details. Its profile panel shows clearly labelled estimates based on plant group, family and name; those are not a substitute for species-level advice.
 - The plant-name catalogue only appears after running the import command. Searches return an empty result on a fresh database until then.
 - No accounts. Clearing cookies loses access to server-side data.
 - Photos are compressed in the browser, stored in the database and sent to the AI provider only when the user presses Analyze.

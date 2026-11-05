@@ -139,6 +139,19 @@ footer{opacity:.92}
 .pnrow .tag{flex:none;margin-top:2px}
 .tag.acc{background:rgba(79,168,79,.18)}
 .tag.syn{background:rgba(242,169,0,.24)}
+.pnrow{width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.pnrow[aria-pressed="true"]{border-color:var(--green);box-shadow:inset 0 0 0 2px var(--green);background:rgba(79,168,79,.08)}
+.pndet{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--bg));padding:14px 16px;margin-top:12px}
+.pndet .pndh{display:flex;gap:12px;align-items:flex-start}
+.pndet .pnemoji{font-size:2rem;line-height:1}
+.pndet .pndh>div{min-width:0;flex:1}
+.pndet .pndh h3{margin:0;font-size:1.25rem;line-height:1.25}
+.pndet .pndh small{display:block;color:var(--muted);line-height:1.4}
+.pndet .kv{margin:12px 0}
+.pndet .kv small{line-height:1.3}
+.pndet .kv b{display:block;font-size:.95rem;line-height:1.4;margin-top:2px}
+.pndet .note{margin-top:10px;font-size:.92rem}
+.pndet .chips{margin-top:12px}
 .pnmore{display:flex;justify-content:center;margin-top:14px}
 </style>
 </head>
@@ -193,6 +206,7 @@ footer{opacity:.92}
 <div class="card">
 <div style="max-width:440px"><label for="pnQ">Search plant names</label><input id="pnQ" type="search" maxlength="80" placeholder="Type at least 2 letters, for example rose or mango" autocomplete="off"></div>
 <div class="out" id="pnSum" role="status" aria-live="polite">Type at least 2 letters to search the plant-name catalogue.</div>
+<div class="pndet" id="pnDet"><p class="muted">Search for a name, then choose a result to see its basic profile and estimated light and water needs.</p></div>
 <div id="pnList"></div>
 <div class="pnmore"><button class="btn alt sm" id="pnMore" type="button" hidden>Show more</button></div>
 </div>
@@ -564,20 +578,82 @@ exr();
 
 /* ---- Plant names A–Z (search API backed by the imported USDA catalogue) ---- */
 const PN_LIMIT=20;
-let pnTimer=0,pnSeq=0,pnVisible=0,pnTotal=0;
+let pnTimer=0,pnSeq=0,pnVisible=0,pnTotal=0,pnItems=[],pnSel=-1;
 const pnStatus=html=>{$('pnSum').innerHTML=html};
-function pnCard(p){
+const pnFamilies={
+ moss:'mniaceae|bryaceae|hypnaceae|dicranaceae|sphagnaceae|polytrichaceae|thuidiaceae|brachytheciaceae|pottiaceae|grimmiaceae|orthotrichaceae|funariaceae|fissidentaceae|hylocomiaceae|climaciaceae|leskeaceae|amblystegiaceae|bartramiaceae|plagiotheciaceae|pylaisiaceae|neckeraceae|hookeriaceae|sematophyllaceae|entodontaceae|aulacomniaceae'.split('|'),
+ fern:'aspleniaceae|athyriaceae|blechnaceae|dennstaedtiaceae|dryopteridaceae|equisetaceae|isoetaceae|lycopodiaceae|marsileaceae|ophioglossaceae|osmundaceae|polypodiaceae|pteridaceae|salviniaceae|selaginellaceae|thelypteridaceae|hymenophyllaceae|schizaeaceae|anemiaceae|cyatheaceae'.split('|'),
+ grass:'poaceae|cyperaceae|juncaceae|typhaceae|sparganiaceae'.split('|'),
+ aquatic:'alismataceae|butomaceae|ceratophyllaceae|haloragaceae|hydrocharitaceae|juncaginaceae|nymphaeaceae|podostemaceae|pontederiaceae|potamogetonaceae|ruppiaceae|zosteraceae|lemnaceae'.split('|'),
+ orchid:'orchidaceae'.split('|'),
+ succulent:'cactaceae|crassulaceae|aizoaceae|portulacaceae'.split('|'),
+ palm:'arecaceae'.split('|'),
+ vine:'vitaceae|convolvulaceae|cucurbitaceae|passifloraceae|dioscoreaceae|smilacaceae|bignoniaceae|aristolochiaceae'.split('|'),
+ tree:'pinaceae|cupressaceae|fagaceae|betulaceae|juglandaceae|salicaceae|ulmaceae|moraceae|lauraceae|magnoliaceae|sapindaceae|anacardiaceae|rutaceae|myrtaceae|meliaceae|ebenaceae|sapotaceae|oleaceae|platanaceae|taxodiaceae|ginkgoaceae|araucariaceae|podocarpaceae|casuarinaceae|phyllanthaceae|combretaceae|malvaceae|rosaceae|fabaceae'.split('|'),
+ shrub:'caprifoliaceae|ericaceae|rhamnaceae|berberidaceae|buxaceae|celastraceae|cornaceae|elaeagnaceae|hydrangeaceae|theaceae|thymelaeaceae|styracaceae|symplocaceae|aquifoliaceae|calycanthaceae'.split('|'),
+ herb:'asteraceae|lamiaceae|apiaceae|brassicaceae|plantaginaceae|ranunculaceae|papaveraceae|boraginaceae|scrophulariaceae|polygonaceae|amaranthaceae|chenopodiaceae|caryophyllaceae|violaceae|gentianaceae|primulaceae|campanulaceae|solanaceae|onagraceae|geraniaceae|euphorbiaceae'.split('|')
+};
+const pnCare={
+ tree:{icon:'🌳',label:'Tree',sun:'Full sun (6+ hours)',water:'Deep water when the top 5–8 cm of soil is dry, often every 1–2 weeks after it is established',soil:'Deep, well-drained soil'},
+ shrub:{icon:'🌿',label:'Shrub',sun:'Full sun to light shade',water:'Water when the top 3–4 cm is dry, often every 1–2 weeks',soil:'Well-drained soil with some compost'},
+ herb:{icon:'🌱',label:'Herbaceous plant',sun:'Full sun to partial shade (4–6 hours)',water:'Water when the top 2–3 cm is dry, often 2–3 times a week in hot weather',soil:'Loose, well-drained soil'},
+ grass:{icon:'🌾',label:'Grass, sedge or rush',sun:'Full sun (6+ hours)',water:'Water when the top 2–3 cm is dry; keep young plants moist',soil:'Well-drained to moist soil'},
+ fern:{icon:'🌿',label:'Fern or fern ally',sun:'Partial to full shade (under 4 hours of direct sun)',water:'Keep evenly moist; water when the surface just starts to dry',soil:'Moist, humus-rich, well-drained soil'},
+ moss:{icon:'🍃',label:'Moss or liverwort',sun:'Shade to partial light',water:'Keep damp; mist often and do not let it dry out fully',soil:'Moist, acidic, humus-rich surface'},
+ aquatic:{icon:'💧',label:'Aquatic plant',sun:'Full sun to partial shade',water:'Keep in clean water or permanently wet soil; change still water regularly',soil:'Pond soil or wet, muddy ground'},
+ succulent:{icon:'🌵',label:'Succulent or cactus',sun:'Full sun to very bright light',water:'Only when the soil is completely dry, often every 2–3 weeks',soil:'Gritty, fast-draining soil'},
+ orchid:{icon:'🌸',label:'Orchid',sun:'Bright, filtered light (no harsh afternoon sun)',water:'Water when the top 2 cm of the growing medium is dry',soil:'Airy orchid bark or a very loose mix'},
+ palm:{icon:'🌴',label:'Palm',sun:'Full sun to light shade',water:'Deep water when the top 5 cm is dry; keep young palms moist',soil:'Deep, well-drained soil'},
+ vine:{icon:'🌿',label:'Vine or climber',sun:'Full sun to partial shade',water:'Water when the top 3 cm is dry, more often in hot weather',soil:'Rich, well-drained soil'},
+ unknown:{icon:'🪴',label:'Plant (group unclear)',sun:'Check the species; full sun to partial shade is a safe starting point',water:'Water when the top 2–3 cm of soil feels dry',soil:'Well-drained soil'}
+};
+function pnType(p){
+ const n=((p.commonName||'')+' '+(p.scientificName||'')).toLowerCase(),f=(p.family||'').toLowerCase();
+ const fam=k=>pnFamilies[k].includes(f),word=re=>re.test(n);
+ if(fam('moss')||word(/moss|liverwort|hornwort/))return 'moss';
+ if(fam('fern')||word(/fern|horsetail|clubmoss|quillwort|moonwort|adder.?s.?tongue/))return 'fern';
+ if(fam('aquatic')||word(/waterlily|water lily|pondweed|duckweed|eelgrass|lotus|water hyacinth|pickerelweed/))return 'aquatic';
+ if(fam('grass')||word(/\bgrass\b|\bsedge\b|\brush\b|\breed\b|bamboo/))return 'grass';
+ if(fam('orchid')||word(/orchid/))return 'orchid';
+ if(fam('succulent')||word(/cactus|cacti|succulent|stonecrop|\baloe\b|\bagave\b|hen and chicks|ice plant/))return 'succulent';
+ if(fam('palm')||word(/palm|palmetto/))return 'palm';
+ if(fam('vine')||word(/\bvines?\b|creeper|climber|liana/))return 'vine';
+ if(fam('tree')||word(/\btree\b|\boak\b|\bpines?\b|\bfirs?\b|spruce|cedar|willow|birch|maple|walnut|hickory|beech|chestnut|poplar|cottonwood|juniper|cypress|hemlock|redwood|sequoia|eucalyptus|mango|guava|neem|banyan|peepal|jamun|tamarind|jackfruit|sandalwood/))return 'tree';
+ if(fam('shrub')||word(/\bshrubs?\b|\bbush\b|blueberry|azalea|rhododendron|manzanita/))return 'shrub';
+ return fam('herb')?'herb':'unknown';
+}
+function pnLibraryMatch(p){
+ const c=(p.commonName||'').trim().toLowerCase(),s=(p.scientificName||'').toLowerCase();
+ return P.findIndex(x=>{
+  const xs=(x.sci||'').toLowerCase();
+  return x.n.toLowerCase()===c||(Boolean(xs)&&(s===xs||s.startsWith(xs+' ')));
+ });
+}
+function pnCard(p,i){
  const common=(p.commonName||'').trim(),sci=p.scientificName||'',family=p.family||'';
  const main=common
   ?`<b>${esc(common)}</b><small><i>${esc(sci)}</i>${family?' · '+esc(family):''}</small>`
   :`<b><i>${esc(sci)}</i></b><small>${family?esc(family):'Family not listed'}</small>`;
- return `<div class="pnrow"><div class="pnmain">${main}</div><span class="tag ${p.accepted?'acc':'syn'}">${p.accepted?'Accepted':'Synonym'}</span></div>`;
+ return `<button class="pnrow" type="button" data-pn="${i}" aria-pressed="${i===pnSel}"><span class="pnmain">${main}</span><span class="tag ${p.accepted?'acc':'syn'}">${p.accepted?'Accepted':'Synonym'}</span></button>`;
+}
+function pnDetail(p,index){
+ document.querySelectorAll('#pnList [data-pn]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.pn===index)));
+ if(!p){$('pnDet').innerHTML='<p class="muted">Search for a name, then choose a result to see its basic profile and estimated light and water needs.</p>';return}
+ const common=(p.commonName||'').trim(),sci=p.scientificName||'',family=p.family||'',symbol=(p.symbol||'').trim();
+ const type=pnType(p),care=pnCare[type]||pnCare.unknown,guide=pnLibraryMatch(p);
+ const title=common?esc(common):`<i>${esc(sci)}</i>`;
+ const subtitle=common?`<i>${esc(sci)}</i>`:'';
+ $('pnDet').innerHTML=`<div class="pndh"><span class="pnemoji">${care.icon}</span><div><h3>${title}</h3>${subtitle?`<small>${subtitle}</small>`:''}</div><span class="tag ${p.accepted?'acc':'syn'}">${p.accepted?'Accepted':'Synonym'}</span></div>
+ <div class="kv"><div><small>Plant group</small><b>${care.label}</b></div><div><small>Light (estimate)</small><b>${esc(care.sun)}</b></div><div><small>Water (estimate)</small><b>${esc(care.water)}</b></div><div><small>Soil (estimate)</small><b>${esc(care.soil)}</b></div><div><small>Family</small><b>${family?esc(family):'Not listed'}</b></div><div><small>USDA symbol</small><b>${symbol?esc(symbol):'—'}</b></div></div>
+ <p class="note warn"><b>Estimate, not a verified guide.</b> This profile is built from the plant group and the USDA name record. A wild species can need very different care from a garden variety, so check a local source before planting.</p>
+ <p class="muted" style="font-size:.9rem">Before watering, push a finger 2–3 cm into the soil. Water only when it feels dry, and let excess water drain away.</p>
+ <div class="chips">${symbol?`<a class="btn alt sm" href="https://plants.usda.gov/plant-profile/${encodeURIComponent(symbol)}" target="_blank" rel="noopener noreferrer">View USDA record</a>`:''}${guide>=0?`<button class="btn sm" type="button" data-pnopen="${guide}">Open detailed care guide</button>`:''}</div>`;
 }
 function pnSearch(more){
  const q=$('pnQ').value.trim();
  if(q.length<2){
-  pnSeq++;pnVisible=0;pnTotal=0;$('pnList').innerHTML='';$('pnMore').hidden=true;
-  pnStatus('Type at least 2 letters to search the plant-name catalogue.');
+  pnSeq++;pnVisible=0;pnTotal=0;pnItems=[];pnSel=-1;$('pnList').innerHTML='';$('pnMore').hidden=true;
+  pnStatus('Type at least 2 letters to search the plant-name catalogue.');pnDetail(null,-1);
   return;
  }
  if(!window.fetch){
@@ -586,7 +662,7 @@ function pnSearch(more){
   return;
  }
  const offset=more?pnVisible:0,seq=++pnSeq;
- if(!more){$('pnList').innerHTML='';pnVisible=0;pnTotal=0}
+ if(!more){$('pnList').innerHTML='';pnItems=[];pnSel=-1;pnVisible=0;pnTotal=0;pnDetail(null,-1)}
  pnStatus('<b>Searching…</b>');
  $('pnMore').hidden=true;$('pnMore').disabled=true;
  window.fetch(`/api/plants?q=${encodeURIComponent(q)}&limit=${PN_LIMIT}&offset=${offset}`)
@@ -594,10 +670,11 @@ function pnSearch(more){
   .then(data=>{
    if(seq!==pnSeq)return;
    const items=Array.isArray(data.items)?data.items:[];
-   pnTotal=Number(data.total)||0;pnVisible=offset+items.length;
-   if(more)$('pnList').insertAdjacentHTML('beforeend',items.map(pnCard).join(''));
-   else $('pnList').innerHTML=items.map(pnCard).join('');
-   if(pnTotal)pnStatus(`<b>${pnTotal.toLocaleString()} ${pnTotal===1?'match':'matches'}</b><p class="muted">Showing ${Math.min(pnVisible,pnTotal).toLocaleString()} of ${pnTotal.toLocaleString()} names. These are catalogue names; open the Plant library above for full care guides.</p>`);
+   pnItems=more?pnItems.concat(items):items.slice();
+   pnTotal=Number(data.total)||0;pnVisible=pnItems.length;
+   $('pnList').innerHTML=pnItems.map(pnCard).join('');
+   if(pnItems.length){if(pnSel<0||pnSel>=pnItems.length)pnSel=0;pnDetail(pnItems[pnSel],pnSel)}else pnDetail(null,-1);
+   if(pnTotal)pnStatus(`<b>${pnTotal.toLocaleString()} ${pnTotal===1?'match':'matches'}</b><p class="muted">Showing ${Math.min(pnVisible,pnTotal).toLocaleString()} of ${pnTotal.toLocaleString()} names. Choose a result to see its basic profile. Care fields are estimates for the plant group.</p>`);
    else pnStatus(`<b>No names found for “${esc(q)}”.</b><p class="muted">Check the spelling, or try a shorter word. If every search is empty, the server may still need the plant-name import (see the README).</p>`);
    $('pnMore').hidden=!items.length||pnVisible>=pnTotal;
    $('pnMore').disabled=false;
@@ -610,6 +687,8 @@ function pnSearch(more){
 }
 $('pnQ').addEventListener('input',()=>{clearTimeout(pnTimer);pnTimer=setTimeout(()=>pnSearch(false),300)});
 $('pnMore').onclick=()=>pnSearch(true);
+$('pnList').onclick=e=>{const b=e.target.closest('[data-pn]');if(!b)return;pnSel=+b.dataset.pn;pnDetail(pnItems[pnSel],pnSel)};
+$('pnDet').onclick=e=>{const b=e.target.closest('[data-pnopen]');if(b)openPlant(+b.dataset.pnopen)};
 
 /* ---- AI Gardening Assistant (uses the viewer-granted Claude capability) ---- */
 let chats=ld('gl_chats',[]),cur=null,ctxP=null,busy=false;

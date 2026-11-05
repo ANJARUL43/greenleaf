@@ -81,6 +81,47 @@ test('plant name search renders names returned by the API', async () => {
   assert.match(el('pnList').textContent ?? '', /sweetbriar rose/);
   assert.match(el('pnList').textContent ?? '', /Rosa rubiginosa L\./);
   assert.match(el('pnSum').textContent ?? '', /1 match/);
+  const detail = el('pnDet').textContent ?? '';
+  assert.match(detail, /Plant group/);
+  assert.match(detail, /Light \(estimate\)/);
+  assert.match(detail, /Water \(estimate\)/);
+  assert.match(detail, /Soil \(estimate\)/);
+  assert.match(detail, /Estimate, not a verified guide/);
+  assert.match(detail, /Rosaceae/);
+  assert.match(detail, /ROSA/);
+  const row = d.querySelector('#pnList .pnrow') as HTMLElement;
+  assert.equal(row.getAttribute('aria-pressed'), 'true');
+});
+
+test('plant name detail links to a matching detailed care guide', async () => {
+  const { dom, d, el } = load();
+  (dom.window as unknown as { fetch: () => Promise<unknown> }).fetch = async () => ({
+    ok: true,
+    json: async () => ({
+      total: 1,
+      limit: 20,
+      offset: 0,
+      items: [
+        {
+          symbol: 'MAIN3',
+          synonymSymbol: '',
+          scientificName: 'Mangifera indica L.',
+          commonName: 'Mango',
+          family: 'Anacardiaceae',
+          accepted: true,
+        },
+      ],
+    }),
+  });
+  const q = el<HTMLInputElement>('pnQ');
+  q.value = 'mango';
+  q.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+  await wait(400);
+  const open = d.querySelector('#pnDet [data-pnopen]') as HTMLButtonElement | null;
+  assert.ok(open, 'an exact library match should offer the detailed guide');
+  open.click();
+  assert.match(el('det').textContent ?? '', /Mango/);
+  assert.match(el('det').textContent ?? '', /Full sun/);
 });
 
 test('adding a plant to My garden renders a card and persists', () => {
