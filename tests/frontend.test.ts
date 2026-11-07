@@ -132,6 +132,12 @@ test('adding a plant to My garden renders a card and persists', () => {
   el<HTMLButtonElement>('gaAdd').click();
   assert.equal(d.querySelectorAll('#gaList .card').length, 1);
   assert.match(dom.window.localStorage.getItem('gl_garden') ?? '', /"pid"/);
+  const delBtn = d.querySelector('#gaList button[data-del]') as HTMLButtonElement | null;
+  const logBtn = d.querySelector('#gaList button[data-h]') as HTMLButtonElement | null;
+  const noteBtn = d.querySelector('#gaList button[data-n]') as HTMLButtonElement | null;
+  assert.match(delBtn?.getAttribute('aria-label') ?? '', /Remove .+ from my garden/);
+  assert.match(logBtn?.getAttribute('aria-label') ?? '', /Log size for .+/);
+  assert.match(noteBtn?.getAttribute('aria-label') ?? '', /Save note for .+/);
 });
 
 test('watering reminders show due plants and can mark them watered', () => {
