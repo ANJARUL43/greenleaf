@@ -132,6 +132,27 @@ test('adding a plant to My garden renders a card and persists', () => {
   el<HTMLButtonElement>('gaAdd').click();
   assert.equal(d.querySelectorAll('#gaList .card').length, 1);
   assert.match(dom.window.localStorage.getItem('gl_garden') ?? '', /"pid"/);
+  const delBtn = d.querySelector('#gaList button[data-del]') as HTMLButtonElement | null;
+  assert.ok(delBtn);
+  assert.match(delBtn.getAttribute('aria-label') ?? '', /Remove Marigold from garden/);
+});
+
+test('removing a plant confirms before deletion', () => {
+  const { dom, d, el } = load();
+  el<HTMLButtonElement>('gaAdd').click();
+  assert.equal(d.querySelectorAll('#gaList .card').length, 1);
+
+  // User cancels confirmation -> plant remains
+  let confirmed = false;
+  dom.window.confirm = () => confirmed;
+  const delBtn = d.querySelector('#gaList button[data-del]') as HTMLButtonElement;
+  delBtn.click();
+  assert.equal(d.querySelectorAll('#gaList .card').length, 1);
+
+  // User accepts confirmation -> plant removed
+  confirmed = true;
+  delBtn.click();
+  assert.equal(d.querySelectorAll('#gaList .card').length, 0);
 });
 
 test('watering reminders show due plants and can mark them watered', () => {
