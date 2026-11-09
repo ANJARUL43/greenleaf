@@ -5,7 +5,7 @@
   "type": "module",
   "description": "GreenLeaf plant care and gardening web app",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
