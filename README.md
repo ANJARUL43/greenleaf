@@ -8,7 +8,7 @@ This repository contains an Express + TypeScript server, a SQLite database with 
 
 | Area | Status |
 | --- | --- |
-| Lint, typecheck, production build | Run and passing (Windows, Node 22; CI covers Linux on Node 20 and 22) |
+| Lint, typecheck, production build | Run and passing (Windows, Node 22; CI covers Linux on Node 22 and 24) |
 | 18 automated tests (API, migrations, plant CSV import, AI proxy with a mock upstream, frontend smoke tests in jsdom) | Passing |
 | Server start from the production build, static files, health endpoint | Smoke-tested |
 | Windows | Tested locally (Node 22). If PowerShell blocks `npm.ps1`, use `npm.cmd` |
@@ -19,7 +19,7 @@ This repository contains an Express + TypeScript server, a SQLite database with 
 
 ## Requirements
 
-- Node.js 20 or newer and npm
+- Node.js 22 or newer and npm
 - On Windows, `better-sqlite3` normally installs a prebuilt binary. If `npm install` fails, install the Visual Studio Build Tools ("Desktop development with C++") and retry.
 
 ## Run locally (Windows PowerShell, macOS, Linux)
