@@ -153,9 +153,12 @@ footer{opacity:.92}
 .pndet .note{margin-top:10px;font-size:.92rem}
 .pndet .chips{margin-top:12px}
 .pnmore{display:flex;justify-content:center;margin-top:14px}
+.skip-link{position:absolute;left:-9999px;top:12px;z-index:100;background:var(--green);color:var(--on);font-weight:700;padding:10px 16px;border-radius:12px;text-decoration:none;box-shadow:var(--shadow)}
+.skip-link:focus-visible{left:16px}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#top">Skip to content</a>
 <div class="wrap">
 <header class="top">
 <a class="brand" href="#top"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="max-height:none"><circle cx="14" cy="14" r="14" fill="var(--green)"/><path d="M14 22V12M14 14C14 9 18 7 22 7C22 12 19 14 14 14ZM14 17C14 13 11 11 7 11C7 15 9 17 14 17Z" stroke="var(--on)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>GreenLeaf</a>

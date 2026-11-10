@@ -165,3 +165,12 @@ test('assistant falls back to offline help when no AI is available', async () =>
   await wait();
   assert.match(el('aC').textContent ?? '', /Offline help/);
 });
+
+test('skip link allows keyboard users to bypass navigation to main content', () => {
+  const { d, el } = load();
+  const skipLink = d.querySelector<HTMLAnchorElement>('a.skip-link');
+  assert.ok(skipLink, 'skip link should be present');
+  assert.equal(skipLink.getAttribute('href'), '#top');
+  assert.match(skipLink.textContent ?? '', /skip to content/i);
+  assert.ok(el('top'), 'target landmark #top should exist');
+});
