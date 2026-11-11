@@ -134,6 +134,31 @@ test('adding a plant to My garden renders a card and persists', () => {
   assert.match(dom.window.localStorage.getItem('gl_garden') ?? '', /"pid"/);
 });
 
+test('removing a plant requires confirmation and includes accessible aria-label', () => {
+  const { dom, d, el } = load();
+  el<HTMLButtonElement>('gaAdd').click();
+  const delBtn = d.querySelector('#gaList button[data-del]') as HTMLButtonElement | null;
+  assert.ok(delBtn);
+  assert.match(delBtn.getAttribute('aria-label') ?? '', /Remove Marigold from my garden/);
+
+  let confirmCalled = false;
+  let confirmMessage = '';
+  dom.window.confirm = (msg?: string) => {
+    confirmCalled = true;
+    confirmMessage = msg ?? '';
+    return false; // User cancels removal
+  };
+
+  delBtn.click();
+  assert.equal(confirmCalled, true);
+  assert.match(confirmMessage, /Remove Marigold from your garden/);
+  assert.equal(d.querySelectorAll('#gaList .card').length, 1, 'Plant should not be removed when cancelled');
+
+  dom.window.confirm = () => true; // User confirms removal
+  delBtn.click();
+  assert.equal(d.querySelectorAll('#gaList .card').length, 0, 'Plant should be removed when confirmed');
+});
+
 test('watering reminders show due plants and can mark them watered', () => {
   const { d, el } = load();
   const past = new Date(Date.now() - 5 * 864e5).toISOString().slice(0, 10);
